@@ -4,14 +4,6 @@
 
 Este guia explica o que é o Azure DevOps, como acessá-lo e como utilizá-lo no dia a dia do time de Manutenção de Sistemas Legados. Foi escrito para quem **nunca usou o Azure DevOps antes**.
 
-## Pré-requisitos
-
-- Acesso à internet
-- Conta corporativa fornecida pela empresa (e-mail `@<dominio-da-empresa>`)
-- Permissão concedida pela gerência no projeto `<nome-do-projeto>`
-
----
-
 ## O que é o Azure DevOps?
 
 O **Azure DevOps** é uma plataforma da Microsoft para gestão de desenvolvimento de software. Para o nosso time, ele serve como:
@@ -26,12 +18,12 @@ O **Azure DevOps** é uma plataforma da Microsoft para gestão de desenvolviment
 
 ## Como acessar o Azure DevOps
 
-1. Abra seu navegador e acesse: `https://dev.azure.com/<nome-da-organizacao>`
+1. Abra seu navegador e acesse: `https://gantc.visualstudio.com/Senior%20Agro%20Dev`
 2. Clique em **"Sign in"** (entrar)
-3. Use seu e-mail corporativo `@<dominio-da-empresa>` e sua senha
-4. Após o login, selecione o projeto: **`<nome-do-projeto>`**
+3. Use seu e-mail corporativo `@gatec.onmicrosoft.com` e sua senha
+4. Após o login, selecione o projeto: **`gantc > Senior Agro Dev`**
 
-> ⚠️ **Atenção:** Se aparecer uma mensagem de "Acesso negado" ou "Você não tem permissão", contate a gerência para solicitar acesso. Não tente criar uma conta por conta própria.
+> ⚠️ **Atenção:** Se aparecer uma mensagem de "Acesso negado" ou "Você não tem permissão", contate o responsável para solicitar acesso. Não tente criar uma conta por conta própria.
 
 ---
 
@@ -65,7 +57,7 @@ Para acessar: clique em **Boards** no menu lateral → **Boards** (ou **Backlogs
 
 | Tipo | Ícone | Quando aparece |
 |---|---|---|
-| **User Story** | 📋 | Melhoria ou atividades que não se encaixam no escopo da manutenção |
+| **User Story** | 📋 | Atendimneto de Dúvidas e Incidentes |
 | **Fix** | 🔧 | Correção de bug |
 | **Hotfix** | 🚨 | Correção de bug — **prioridade máxima** |
 
@@ -107,7 +99,7 @@ Atualizar o work item é a principal atividade do dev no Azure DevOps. Faça iss
 ### Passo a passo para adicionar um comentário
 
 1. Abra o work item
-2. Role a tela para baixo até a seção **"Histórico"** ou **"Comentários"**
+2. Role a tela para baixo até a seção **Discussion**
 3. Clique no campo de texto e escreva sua atualização
 4. Clique em **"Salvar"** (botão azul)
 
@@ -120,7 +112,7 @@ Atualizar o work item é a principal atividade do dev no Azure DevOps. Faça iss
 3. Clique no campo e selecione o novo estado
 4. Clique em **"Salvar"**
 
-> ⚠️ **Atenção:** Só mude o estado para **"Closed"** quando o Work Item estiver finalizada e entregue.
+> ⚠️ **Atenção:** Só mude o estado para **"Closed"** quando o Work Item estiver finalizado e entregue ao time de suporte.
 
 ---
 

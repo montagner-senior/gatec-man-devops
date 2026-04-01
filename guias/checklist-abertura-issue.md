@@ -1,4 +1,4 @@
-# Precisa de ajuda? É rapidinho! 😊
+# Modelo Checklist para Suporte Abrir Issue
 
 Antes de enviar, só precisamos de **5 informações**. Leva menos de 2 minutos!
 
@@ -12,4 +12,4 @@ Antes de enviar, só precisamos de **5 informações**. Leva menos de 2 minutos!
 
 > 💡 **Print rápido:** `Print Screen` → abrir o Paint → `Ctrl+V` → salvar → anexar aqui.
 
-Só isso! Com essas informações já conseguimos resolver sem precisar te contatar de volta. 🚀
+Só isso! Com essas informações já conseguimos resolver sem precisar te contatar de volta.

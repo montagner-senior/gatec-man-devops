@@ -1,0 +1,57 @@
+title: ".devops — Gerência e Processos"
+description: "Base de conhecimento do Time de Manutenção de Sistemas Legados"
+theme: just-the-docs
+
+url: "https://montagner-senior.github.io"
+baseurl: "/gatec-man-devops"
+
+# Idioma e codificação
+lang: pt-BR
+
+# Navegação lateral — ordem das seções
+nav_external_links:
+  - title: Azure DevOps
+    url: https://dev.azure.com
+
+# Habilita busca
+search_enabled: true
+search:
+  heading_level: 3
+  previews: 2
+  preview_words_before: 3
+  preview_words_after: 3
+  tokenizer_separator: /[\s/]+/
+  rel_url: true
+  button: false
+
+# Habilita links de edição no GitHub
+gh_edit_link: true
+gh_edit_link_text: "Editar esta página no GitHub"
+gh_edit_repository: "https://github.com/montagner-senior/gatec-man-devops"
+gh_edit_branch: "main"
+gh_edit_view_mode: "edit"
+
+# Rodapé
+footer_content: "Time de Manutenção de Sistemas Legados — uso interno"
+
+# Cores (tema claro com destaque azul DevOps)
+color_scheme: light
+
+callouts_level: loud
+callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Importante
+    color: blue
+  new:
+    title: Novo
+    color: green
+  warning:
+    title: Atenção
+    color: red
+
+# Plugins GitHub Pages safe
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap

@@ -4,14 +4,6 @@
 
 Descrever o processo de atendimento a um **Fix** — uma correção de defeito identificado internamente pelo time, sem impacto crítico imediato em produção.
 
-## Pré-requisitos
-
-- Acesso ao Azure DevOps
-- Acesso ao checkout SVN do sistema afetado
-- Entendimento dos [tipos de work item](../guias/work-items.md)
-
----
-
 ## O que é um Fix?
 
 Um **Fix** é a correção planejada de um defeito identificado pelo próprio time — durante uma investigação, revisão de código ou análise proativa. Diferente do Hotfix, **não há impacto crítico e imediato em produção** que exija parar tudo.
