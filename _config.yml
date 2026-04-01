@@ -1,6 +1,6 @@
 title: ".devops — Gerência e Processos"
 description: "Base de conhecimento do Time de Manutenção de Sistemas Legados"
-theme: just-the-docs
+remote_theme: just-the-docs/just-the-docs
 
 url: "https://montagner-senior.github.io"
 baseurl: "/gatec-man-devops"
@@ -53,5 +53,6 @@ callouts:
 
 # Plugins GitHub Pages safe
 plugins:
+  - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-sitemap
