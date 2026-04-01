@@ -1,3 +1,9 @@
+---
+title: Investigação de Legado
+parent: Processos Operacionais
+nav_order: 3
+---
+
 # Investigação de Código VB6 Legado
 
 ## Objetivo

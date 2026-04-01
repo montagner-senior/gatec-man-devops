@@ -1,3 +1,9 @@
+---
+title: Hotfix
+parent: Processos Operacionais
+nav_order: 2
+---
+
 # Processo de Hotfix
 
 ## Objetivo

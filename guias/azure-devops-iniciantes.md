@@ -1,3 +1,9 @@
+---
+title: Azure DevOps para Iniciantes
+parent: Guias
+nav_order: 1
+---
+
 # Guia de Azure DevOps para Iniciantes
 
 ## Objetivo

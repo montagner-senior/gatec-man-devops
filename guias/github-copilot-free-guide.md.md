@@ -1,3 +1,9 @@
+---
+title: GitHub Copilot Free — Guia
+parent: Guias
+nav_order: 3
+---
+
 # Guithub Copilot Free
 
 ## Objetivo

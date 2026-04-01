@@ -1,3 +1,9 @@
+---
+title: Zendesk → Azure DevOps
+parent: Guias
+nav_order: 5
+---
+
 # Integração Zendesk → Azure DevOps
 
 ## Objetivo

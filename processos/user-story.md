@@ -1,3 +1,9 @@
+---
+title: User Story
+parent: Processos Operacionais
+nav_order: 4
+---
+
 # Processo de User Story
 
 ## Objetivo

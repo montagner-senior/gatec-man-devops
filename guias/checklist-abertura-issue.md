@@ -1,3 +1,9 @@
+---
+title: Checklist de Abertura de Issue
+parent: Guias
+nav_order: 2
+---
+
 # Modelo Checklist para Suporte Abrir Issue
 
 Antes de enviar, só precisamos de **5 informações**. Leva menos de 2 minutos!

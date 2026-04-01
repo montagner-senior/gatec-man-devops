@@ -1,3 +1,9 @@
+---
+title: Acessos e Permissões
+parent: Segurança e Acessos
+nav_order: 1
+---
+
 # Acessos e Permissões no Azure DevOps
 
 ## Objetivo
