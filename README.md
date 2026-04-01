@@ -32,8 +32,7 @@ Processos, guias e referências do **Time de Manutenção**.
 ## Primeiros Passos
 
 - [Azure DevOps para Iniciantes](guias/azure-devops-iniciantes.md)
-- [Controle de Versão — SVN](guias/controle-versao-svn.md)
-- [Checklist de Abertura de Chamado](guias/checklist-abertura-chamado.md)
+- [Checklist de Abertura de Issue](guias/checklist-abertura-issue.md)
 
 ---
 
@@ -50,8 +49,6 @@ Processos, guias e referências do **Time de Manutenção**.
 - [User Story — passo a passo](processos/user-story.md)
 - [Fix — passo a passo](processos/fix.md)
 - [Hotfix — passo a passo](processos/hotfix.md)
-- [Transbordo de Suporte — como atender um ticket do Zendesk](processos/transbordo-suporte.md)
-- [Investigação de Sistemas](processos/investigacao-legado.md)
 
 ---
 
@@ -59,38 +56,6 @@ Processos, guias e referências do **Time de Manutenção**.
 
 - [Como funciona a integração](guias/zendesk-devops.md)
 - [Ajustes definidos na integração](guias/zendesk-devops.md#ajustes-definidos-na-integração-zendesk)
-- [SLA de atendimento](gestao/sla.md)
-
----
-
-## Gestão do Time
-
-- [SLA — Acordo de Nível de Serviço](gestao/sla.md)
-- [Métricas e KPIs](gestao/metricas-kpis.md)
-- [Cerimônias](gestao/cerimonias.md)
-- [Gestão de Capacidade](gestao/capacidade.md)
-
----
-
-## Pipelines (CI/CD)
-
-- [Pipeline de Build (CI)](pipelines/ci-build.md)
-- [Pipeline de Deploy (CD)](pipelines/cd-deploy.md)
-- [Rollback de Deploy](pipelines/rollback.md)
-
----
-
-## Base de Conhecimento
-
-- [Mapa dos Sistemas](base-conhecimento/mapa-sistemas.md)
-- [FAQ do Suporte](base-conhecimento/faq-suporte.md)
-- [Template de Achado de Investigação](base-conhecimento/achados/TEMPLATE-achado.md)
-
----
-
-## Segurança e Acessos
-
-- [Acessos e Permissões](seguranca/acessos-permissoes.md)
 
 ---
 
