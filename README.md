@@ -3,7 +3,7 @@ title: Início
 nav_order: 1
 ---
 
-# .devops — Gerência e Processos
+# Gerência e Processos
 {: .no_toc }
 
 Base de conhecimento do **Time de Manutenção de Sistemas Legados**.
