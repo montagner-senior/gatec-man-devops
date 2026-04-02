@@ -15,10 +15,3 @@ nav_order: 2
 | 5 | **Evidência anexada** | `relations[rel=AttachedFile]` ou `<img>` | Anexo formal ou imagem inline |
 | 6 | **Analista do Suporte** | `Custom.Description` | Campo preenchido |
 
-#	Item	Critério de presença
-•	Descrição do problema	Descrição que explique minimamente o problema
-•	Caminho no menu	Mencionado (ex: "Menu → Tela")
-•	Evidência anexada	Anexo formal ou imagem inline
-•	Analista do Suporte	Campo preenchido
-
-> 💡 **Print rápido:** `Print Screen` → abrir o Paint → `Ctrl+V` → salvar → anexar aqui.
