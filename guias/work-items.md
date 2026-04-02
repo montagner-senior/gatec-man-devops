@@ -59,6 +59,8 @@ Este guia explica os três tipos de work item utilizados pelo time de Manutenç�
 
 Todo work item deve ter pelo menos um comentário técnico antes de ser concluído. Não feche um work item sem registrar o que foi feito.
 
+> 📌 **Dica:** Ao incluir um comentário no campo Discussion, utilize a tag **`#zendesk`** para que o comentário seja enviado ao ticket no Zendesk como **observação interna**.
+
 ## User Story
 
 Um **User Story** representa uma dúvida ou incidente nos sistemas.

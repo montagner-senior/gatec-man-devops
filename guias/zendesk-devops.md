@@ -67,6 +67,8 @@ Próximo passo:
 
 Ao concluir a investigação (mesmo que sem solução definitiva), adicione um comentário em linguagem acessível para que o Suporte possa repassar ao cliente:
 
+> 📌 **Dica:** Utilize a tag **`#zendesk`** no campo Discussion para que o comentário seja enviado ao ticket no Zendesk como **observação interna**.
+
 **Modelo de resposta ao Suporte:**
 
 ```
