@@ -115,12 +115,53 @@ Apresente:
 6. **Erros** - falhas na API
 7. **DryRun** - destaque que nenhuma alteracao foi feita
 
-Se nao DryRun, atualize o historico:
+Se nao DryRun, atualize o historico em `agents/issue-validator-history.md`:
 
-```powershell
-$linha = "| $(Get-Date -Format 'yyyy-MM-dd HH:mm') | {total} | {completas} | {ressalvas} | {incompletas} | {taxa%} | {itens faltantes top 3} | {ids incompletas} |"
-Add-Content -Path "agents\issue-validator-history.md" -Value $linha -Encoding UTF8
+1. **Tabela Resumo** - Leia o arquivo e encontre a ULTIMA linha da tabela resumo
+   (a linha que comeca com `|` e esta antes de `## Detalhes`).
+   Adicione uma NOVA linha de tabela logo ABAIXO dela:
+   ```
+   | {yyyy-MM-dd HH:mm} | {total} | {completas} | {ressalvas} | {incompletas} | {taxa_completas%} |
+   ```
+   Use a ferramenta de edicao de arquivo para inserir a linha. NAO use PowerShell.
+
+2. **Secao Detalhes** - Adicione um bloco no FINAL do arquivo:
+   ```
+   ### {yyyy-MM-dd HH:mm}
+
+   - **Itens mais faltantes:** {item} ({N}), {item} ({N}), {item} ({N})
+   - **IDs incompletas:** {id1}, {id2}, ...
+   - **IDs completas:** {id1}, {id2}, ...
+   ```
+
+**Exemplo concreto.** Se o arquivo atual termina assim:
 ```
+| 2026-04-02 09:49 | 24 | 0 | 0 | 24 | 0% |
+
+## Detalhes
+
+### 2026-04-02 09:49
+...
+```
+
+Apos sua edicao, deve ficar:
+```
+| 2026-04-02 09:49 | 24 | 0 | 0 | 24 | 0% |
+| 2026-04-04 14:30 | 10 | 7 | 1 | 2 | 70% |
+
+## Detalhes
+
+### 2026-04-02 09:49
+...
+
+### 2026-04-04 14:30
+
+- **Itens mais faltantes:** Descricao (2), Evidencia (1)
+- **IDs incompletas:** 128179, 128099
+- **IDs completas:** 127921, 128257, 128181, 128072, 128069, 127974, 127946
+```
+
+A taxa mostra **% completas** (metrica positiva). Ex: 7 completas de 10 = 70%.
 
 ---
 
