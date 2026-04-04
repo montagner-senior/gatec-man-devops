@@ -11,7 +11,7 @@ lang: pt-BR
 # Navegação lateral — ordem das seções
 nav_external_links:
   - title: Azure DevOps
-    url: https://gantc.visualstudio.com/Senior%20Agro%20Dev
+    url: https://visualstudio.com/Senior%20Agro%20Dev
 
 # Habilita busca
 search_enabled: true

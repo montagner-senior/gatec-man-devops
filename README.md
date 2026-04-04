@@ -59,6 +59,14 @@ Processos, guias e referências do **Time de Manutenção**.
 
 ---
 
+## Agentes Copilot
+
+- [Issue Validator — valida issues incompletas no path Manutenção](agents/issue-validator-how-to.md)
+- [Critérios de validação (6 itens)](agents/issue-validator-validation-criteria.md)
+- [Histórico de execuções](agents/issue-validator-history.md)
+
+---
+
 ## Referências
 
 - [Documentação Oficial Azure DevOps](https://learn.microsoft.com/pt-br/azure/devops/)

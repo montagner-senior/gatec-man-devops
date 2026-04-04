@@ -1,7 +1,21 @@
 # =============================================================================
-# run-validator.ps1 — Issue Validator Agent
-# Valida work items New do Azure DevOps (path Torre Manutencao)
-# e aplica comentario HTML + tag "abertura-incompleta" nas incompletas.
+# run-validator.ps1 - Issue Validator Agent (Data Layer)
+# Dois modos:
+#   FETCH (padrao): Busca issues e grava JSON para o agente (LLM) analisar.
+#   APPLY (-Apply): Le resultados do agente e posta comentarios/tags.
+#
+# O agente (LLM) e o cerebro: ele analisa cada issue com inteligencia,
+# decide o que esta faltando, e gera comentarios contextuais.
+# Este script e apenas o data layer (busca + acao).
+#
+# Uso:
+#   & agents\run-validator.ps1                              # Fetch todas
+#   & agents\run-validator.ps1 -Top 3                       # Fetch limitado
+#   & agents\run-validator.ps1 -Id 128340                   # Fetch por ID
+#   & agents\run-validator.ps1 -Id 128340,128257            # Multiplos IDs
+#   & agents\run-validator.ps1 -Apply results.json          # Aplicar resultados
+#   & agents\run-validator.ps1 -Revalidate                  # Revalidar com tag
+#   & agents\run-validator.ps1 -Apply results.json -DryRun  # Preview
 # =============================================================================
 
 param(
@@ -9,26 +23,213 @@ param(
     [string]$Project      = "Senior Agro Dev",
     [string]$AreaPath     = "Senior Agro Dev\Torre Manutencao",
     [string]$TagAlerta    = "abertura-incompleta",
-    [int]$Top             = 0  # 0 = todas, N = limitar para teste
+    [int]$Top             = 0,
+    [int[]]$Id            = @(),
+    [string]$Apply        = "",
+    [switch]$Revalidate,
+    [switch]$DryRun
 )
 
-# --- Encoding seguro para caracteres especiais no terminal Windows ----------
+# --- Encoding seguro para filtros pos-query ---
 $integracaoFiltro  = "Integra" + [char]231 + [char]227 + "o"
 $informaticaFiltro = "Inform"  + [char]225 + "tica"
-$manutencaoLabel   = "Manuten" + [char]231 + [char]227 + "o"
 $excluiProcesso    = @("Mobile", "SimpleFarm", "Web", $integracaoFiltro, $informaticaFiltro)
 $excluiModulo      = @("Scouting")
 
-# --- PASSO 1: Configurar contexto -------------------------------------------
-Write-Host "=== PASSO 1: Configurando contexto Azure DevOps ==="
-az devops configure --defaults organization=$Organization project=$Project
-Write-Host "Contexto: $Organization / $Project"
+# --- Configurar contexto Azure DevOps ---
+Write-Host "Configurando Azure DevOps..."
+az devops configure --defaults organization=$Organization project=$Project 2>$null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "ERRO: Falha ao configurar contexto. Verifique autenticacao."
+    Write-Host "Execute: az devops login --organization $Organization"
+    exit 1
+}
 
-# --- PASSO 2: Buscar issues New sem tag abertura-incompleta ------------------
-Write-Host ""
-Write-Host "=== PASSO 2: Buscando issues elegiveis ==="
+# =============================================================================
+# MODO APPLY - Posta comentarios/tags a partir dos resultados do agente
+# =============================================================================
+if ($Apply -ne "") {
+    Write-Host "=== MODO APPLY ==="
+    if ($DryRun) { Write-Host "[DRY-RUN] Nenhuma alteracao sera feita" }
 
-$wiql = @"
+    if (-not (Test-Path $Apply)) {
+        Write-Host "ERRO: Arquivo nao encontrado: $Apply"
+        exit 1
+    }
+
+    $raw = [System.IO.File]::ReadAllText($Apply, [System.Text.Encoding]::UTF8)
+    $resultados = $raw | ConvertFrom-Json
+    if ($resultados -isnot [array]) { $resultados = @($resultados) }
+
+    $aplicados = 0
+    $erros     = 0
+    $idsVistos = @{}
+
+    foreach ($r in $resultados) {
+        $rid = $r.id
+        Write-Host "--- #$rid ---"
+
+        # Fix idempotencia: evitar duplicata se mesmo ID aparecer mais de uma vez
+        if ($idsVistos.ContainsKey($rid)) {
+            Write-Host "#$rid duplicado no arquivo - pulando"
+            continue
+        }
+        $idsVistos[$rid] = $true
+
+        if ($DryRun) {
+            Write-Host "#$rid [DRY-RUN] Pulado"
+            continue
+        }
+
+        try {
+            # Postar comentario HTML
+            $bodyJson = @{ text = $r.comentarioHtml } | ConvertTo-Json -Depth 5
+            $tempFile = [System.IO.Path]::Combine($env:TEMP, "issue-validator-comment-$rid.json")
+            [System.IO.File]::WriteAllText($tempFile, $bodyJson, (New-Object System.Text.UTF8Encoding($false)))
+
+            az devops invoke `
+                --area wit --resource comments `
+                --route-parameters project=$Project workItemId=$rid `
+                --http-method POST --in-file $tempFile `
+                --api-version "7.1-preview" --output none
+
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "#$rid ERRO ao postar comentario"
+                $erros++
+                continue
+            }
+            Write-Host "#$rid comentario postado"
+
+            # Determinar acao (padrao: incompleta)
+            $acao = if ($r.acao) { $r.acao } else { "incompleta" }
+
+            if ($acao -eq "complementada") {
+                # Remover tag abertura-incompleta
+                $tagsAtuais = $r.tags
+                if ($tagsAtuais -and $tagsAtuais -like "*$TagAlerta*") {
+                    $tagsList = ($tagsAtuais -split ";\s*") | Where-Object { $_.Trim() -ne $TagAlerta -and $_.Trim() -ne "" }
+                    $novasTags = $tagsList -join "; "
+                    az boards work-item update --id $rid --fields "System.Tags=$novasTags" --output none
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Host "#$rid ERRO ao remover tag"
+                        $erros++
+                        continue
+                    }
+                    Write-Host "#$rid tag removida: $TagAlerta"
+                } else {
+                    Write-Host "#$rid tag ja ausente"
+                }
+            }
+            elseif ($acao -eq "completa") {
+                # Adicionar tag abertura-completa
+                $tagCompleta = "abertura-completa"
+                $tagsAtuais = $r.tags
+
+                if ($tagsAtuais -and $tagsAtuais -like "*$tagCompleta*") {
+                    Write-Host "#$rid tag $tagCompleta ja existe"
+                }
+                elseif ([string]::IsNullOrWhiteSpace($tagsAtuais) -or $tagsAtuais.Trim() -eq "None") {
+                    az boards work-item update --id $rid --fields "System.Tags=$tagCompleta" --output none
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Host "#$rid ERRO ao aplicar tag"
+                        $erros++
+                        continue
+                    }
+                    Write-Host "#$rid tag: $tagCompleta"
+                }
+                else {
+                    $novasTags = "$($tagsAtuais.Trim()); $tagCompleta"
+                    az boards work-item update --id $rid --fields "System.Tags=$novasTags" --output none
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Host "#$rid ERRO ao aplicar tag"
+                        $erros++
+                        continue
+                    }
+                    Write-Host "#$rid tag: $novasTags"
+                }
+            }
+            else {
+                # Adicionar tag preservando existentes
+                $tagsAtuais = $r.tags
+
+                if ($tagsAtuais -and $tagsAtuais -like "*$TagAlerta*") {
+                    Write-Host "#$rid tag ja existe"
+                }
+                elseif ([string]::IsNullOrWhiteSpace($tagsAtuais) -or $tagsAtuais.Trim() -eq "None") {
+                    az boards work-item update --id $rid --fields "System.Tags=$TagAlerta" --output none
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Host "#$rid ERRO ao aplicar tag"
+                        $erros++
+                        continue
+                    }
+                    Write-Host "#$rid tag: $TagAlerta"
+                }
+                else {
+                    $novasTags = "$($tagsAtuais.Trim()); $TagAlerta"
+                    az boards work-item update --id $rid --fields "System.Tags=$novasTags" --output none
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Host "#$rid ERRO ao aplicar tag"
+                        $erros++
+                        continue
+                    }
+                    Write-Host "#$rid tag: $novasTags"
+                }
+            }
+
+            $aplicados++
+
+        } catch {
+            Write-Host "#$rid ERRO: $($_.Exception.Message)"
+            $erros++
+        }
+    }
+
+    Write-Host ""
+    Write-Host "=== Apply: $aplicados OK | $erros erros ==="
+    exit 0
+}
+
+# =============================================================================
+# MODO FETCH (padrao) - Busca issues e grava JSON para o agente analisar
+# =============================================================================
+Write-Host "=== MODO FETCH ==="
+
+if ($Id.Count -gt 0) {
+    $ids = $Id
+    Write-Host "Modo ID: $($ids -join ', ')"
+} elseif ($Revalidate) {
+    Write-Host "Modo REVALIDACAO: buscando issues com tag $TagAlerta"
+    $wiql = @"
+SELECT [System.Id], [System.Title]
+FROM WorkItems
+WHERE [System.TeamProject] = '$Project'
+  AND [System.WorkItemType] IN ('Fix', 'Hotfix', 'User Story')
+  AND [System.AreaPath] = '$AreaPath'
+  AND [System.Tags] CONTAINS '$TagAlerta'
+ORDER BY [System.CreatedDate] DESC
+"@
+
+    $queryResult = az boards query --wiql $wiql --output json 2>$null | ConvertFrom-Json
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "ERRO: Falha na query WIQL."
+        exit 1
+    }
+
+    if ($queryResult -is [array]) {
+        $ids = $queryResult | Select-Object -ExpandProperty id
+    } elseif ($queryResult.workItems) {
+        $ids = $queryResult.workItems | Select-Object -ExpandProperty id
+    } else {
+        $ids = @()
+    }
+
+    if ($Top -gt 0 -and $ids.Count -gt $Top) {
+        $ids = $ids | Select-Object -First $Top
+    }
+
+    Write-Host "Issues com tag encontradas: $($ids.Count)"
+} else {
+    $wiql = @"
 SELECT [System.Id], [System.Title]
 FROM WorkItems
 WHERE [System.TeamProject] = '$Project'
@@ -40,261 +241,126 @@ WHERE [System.TeamProject] = '$Project'
 ORDER BY [System.CreatedDate] DESC
 "@
 
-$queryResult = az boards query --wiql $wiql --output json | ConvertFrom-Json
+    $queryResult = az boards query --wiql $wiql --output json 2>$null | ConvertFrom-Json
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "ERRO: Falha na query WIQL."
+        exit 1
+    }
 
-# az boards query retorna array direto ou objeto com .workItems dependendo da versao
-if ($queryResult -is [array]) {
-    $ids = $queryResult | Select-Object -ExpandProperty id
-} elseif ($queryResult.workItems) {
-    $ids = $queryResult.workItems | Select-Object -ExpandProperty id
-} else {
-    $ids = @()
+    if ($queryResult -is [array]) {
+        $ids = $queryResult | Select-Object -ExpandProperty id
+    } elseif ($queryResult.workItems) {
+        $ids = $queryResult.workItems | Select-Object -ExpandProperty id
+    } else {
+        $ids = @()
+    }
+
+    if ($Top -gt 0 -and $ids.Count -gt $Top) {
+        $ids = $ids | Select-Object -First $Top
+    }
+
+    Write-Host "Issues encontradas: $($ids.Count)"
 }
 
-if ($Top -gt 0 -and $ids.Count -gt $Top) {
-    $ids = $ids | Select-Object -First $Top
-}
-
-Write-Host "Issues no WIQL: $($ids.Count)"
-
-if ($ids.Count -eq 0) {
-    Write-Host "Nenhuma issue elegivel encontrada. Encerrando."
+if (-not $ids -or $ids.Count -eq 0) {
+    Write-Host "Nenhuma issue elegivel."
+    $outPath = Join-Path $env:TEMP "validator-fetch.json"
+    [System.IO.File]::WriteAllText($outPath, "[]", (New-Object System.Text.UTF8Encoding($false)))
+    Write-Host "OUTPUT_FILE: $outPath"
     exit 0
 }
 
-# --- Contadores --------------------------------------------------------------
-$totalAnalisadas  = 0
-$totalCompletas   = 0
-$totalIncompletas = 0
-$idsIncompletas   = @()
-$erros            = @()
-$relatorio        = @()
+# Fetch dados de cada issue
+$issues = [System.Collections.ArrayList]@()
+$totalExcluidas = 0
 
-# --- PASSOS 3-5: Loop de validacao, comentario e tag -------------------------
-Write-Host ""
-Write-Host "=== PASSOS 3-5: Validando issues ==="
-
-foreach ($id in $ids) {
-    Write-Host ""
-    Write-Host "--- Processando #$id ---"
+foreach ($workItemId in $ids) {
+    Write-Host "Buscando #$workItemId..."
 
     try {
-        # Buscar detalhes com relacoes (necessario para verificar anexos)
-        $wi        = az boards work-item show --id $id --expand relations --output json | ConvertFrom-Json
-        $titulo    = $wi.fields."System.Title"
-        $descricao = $wi.fields."System.Description"
-        $natureza  = $wi.fields."Custom.ZendeskNatureza"
-        $modulo    = $wi.fields."Custom.ZendeskModulo"
+        $wi = az boards work-item show --id $workItemId --expand relations --output json | ConvertFrom-Json
+
         $processo  = $wi.fields."Custom.ZendeskProcesso"
-        $analista  = $wi.fields."Custom.ZendeskAnalistaSuporte"
-        $relacoes  = $wi.relations
+        $moduloVal = $wi.fields."Custom.ZendeskModulo"
 
         # Filtro pos-query: excluir processos e modulos nao elegiveis
         if ($excluiProcesso -contains $processo) {
-            Write-Host "#$id excluido (processo: $processo)"
+            Write-Host "#$workItemId excluido (processo: $processo)"
+            $totalExcluidas++
             continue
         }
-        if ($excluiModulo -contains $modulo) {
-            Write-Host "#$id excluido (modulo: $modulo)"
+        if ($excluiModulo -contains $moduloVal) {
+            Write-Host "#$workItemId excluido (modulo: $moduloVal)"
+            $totalExcluidas++
             continue
         }
 
-        $totalAnalisadas++
-
-        # Verificar se ja existe comentario do validador (evitar duplicacao)
-        $commentsResult = az devops invoke `
+        # Verificar idempotencia (ja tem comentario do validador?)
+        $commentsRaw = az devops invoke `
             --area wit --resource comments `
-            --route-parameters project=$Project workItemId=$id `
+            --route-parameters project=$Project workItemId=$workItemId `
             --http-method GET --api-version "7.1-preview" `
-            --output json | ConvertFrom-Json
+            --output json 2>$null | ConvertFrom-Json
 
-        $jaValidada = $commentsResult.comments | Where-Object { $_.text -like "*issue-validator-agent*" }
-        if ($jaValidada) {
-            Write-Host "#$id ja validada anteriormente - pulando."
-            $totalCompletas++
-            continue
+        $jaVal = $false
+        if ($commentsRaw.comments) {
+            $jaVal = [bool]($commentsRaw.comments | Where-Object { $_.text -like "*issue-validator-agent*" })
         }
 
-        # =================================================================
-        # VALIDACAO DOS 6 ITENS
-        # =================================================================
-        $descLimpa = ($descricao -replace "<[^>]+>", "") -replace "&nbsp;", " "
-
-        # 1. Tipo (erro, incidente, melhoria, duvida)
-        $v1 = if ($natureza -and $natureza.Trim() -ne "") { $natureza }
-              elseif ($titulo -match "erro|incidente|melhoria|duvida") { $Matches[0] }
-              else { $null }
-
-        # 2. Descricao do problema
-        $v2 = if ([string]::IsNullOrWhiteSpace($descLimpa) -or $descLimpa.Trim() -match "^Ver.*#\d+$") { $null }
-              else { "Presente" }
-
-        # 3. Sistema/modulo afetado
-        $v3 = if ($modulo -and $modulo.Trim() -ne "" -and $modulo -notmatch "^(o sistema|o software|o programa)$") { $modulo }
-              else { $null }
-
-        # 4. Caminho no menu
-        $v4 = if ($descricao -match "(?i)(menu|caminho|tela)") { "Mencionado" }
-              else { $null }
-
-        # 5. Evidencia anexada
-        $anexos = @($relacoes | Where-Object { $_.rel -eq "AttachedFile" })
-        $v5 = if ($anexos.Count -gt 0) { "$($anexos.Count) anexo(s)" }
-              elseif ($descricao -like "*<img*") { "Imagem inline" }
-              else { $null }
-
-        # 6. Analista do Suporte
-        $v6 = if ($analista -and $analista.Trim() -ne "") { $analista }
-              else { $null }
-
-        # Valores para relatorio/comentario
-        $s1 = if ($v1) { $v1 } else { "ausente" }
-        $s2 = if ($v2) { $v2 } else { "ausente" }
-        $s3 = if ($v3) { $v3 } else { "ausente" }
-        $s4 = if ($v4) { $v4 } else { "ausente" }
-        $s5 = if ($v5) { $v5 } else { "ausente" }
-        $s6 = if ($v6) { $v6 } else { "ausente" }
-
-        # Lista de itens faltando (HTML)
-        $itensFaltando = @()
-        if (-not $v1) { $itensFaltando += "<li><strong>1. Tipo</strong> - informe se e erro, incidente, melhoria ou duvida</li>" }
-        if (-not $v2) { $itensFaltando += "<li><strong>2. Descricao do problema</strong> - descreva o que aconteceu e o que o usuario tentou fazer</li>" }
-        if (-not $v3) { $itensFaltando += "<li><strong>3. Sistema/modulo</strong> - informe o modulo especifico (ex: GATEC_SAF)</li>" }
-        if (-not $v4) { $itensFaltando += "<li><strong>4. Caminho no menu</strong> - informe o caminho completo (ex: Logistica - Transporte - Romaneio)</li>" }
-        if (-not $v5) { $itensFaltando += "<li><strong>5. Evidencia</strong> - anexe um print da tela com o problema visivel</li>" }
-        if (-not $v6) { $itensFaltando += "<li><strong>6. Analista do Suporte</strong> - informe o nome do analista responsavel pelo ticket</li>" }
-
-        $completa = $itensFaltando.Count -eq 0
-
-        # Adicionar ao relatorio
-        $tituloCorto = $titulo.Substring(0, [math]::Min(40, $titulo.Length))
-        $relatorio += [PSCustomObject]@{
-            ID        = $id
-            Titulo    = $tituloCorto
-            Tipo      = $s1
-            Descricao = $s2
-            Sistema   = $s3
-            Menu      = $s4
-            Evidencia = $s5
-            Analista  = $s6
-            Tag       = if ($completa) { "-" } else { $TagAlerta }
+        # Extrair descricao como texto limpo (sem HTML)
+        $descHtml = $wi.fields."System.Description"
+        $descText = ""
+        if ($descHtml) {
+            $descText = ($descHtml -replace "<[^>]+>", " ") -replace "&nbsp;", " "
+            $descText = ($descText -replace "\s+", " ").Trim()
         }
 
-        if ($completa) {
-            $totalCompletas++
-            Write-Host "#$id COMPLETA"
-            continue
+        # Contar anexos e verificar imagens inline
+        $anexoCount = 0
+        if ($wi.relations) {
+            $anexoCount = @($wi.relations | Where-Object { $_.rel -eq "AttachedFile" }).Count
         }
+        $temImg = ($descHtml -and $descHtml -like "*<img*")
 
-        # =================================================================
-        # PASSO 4: Postar comentario HTML na issue incompleta
-        # =================================================================
-        $totalIncompletas++
-        $idsIncompletas += $id
-
-        $st1 = if ($v1) { "ok" } else { "AUSENTE" }
-        $st2 = if ($v2) { "ok" } else { "AUSENTE" }
-        $st3 = if ($v3) { "ok" } else { "AUSENTE" }
-        $st4 = if ($v4) { "ok" } else { "AUSENTE" }
-        $st5 = if ($v5) { "ok" } else { "AUSENTE" }
-        $st6 = if ($v6) { "ok" } else { "AUSENTE" }
-
-        $listaHtml = $itensFaltando -join "`n"
-
-        $htmlComentario = @"
-<h2>&#9888;&#65039; Validacao de Qualidade - Issue Incompleta</h2>
-<p>Esta issue foi validada automaticamente e <strong>nao atende ao checklist minimo</strong> para ser trabalhada pelo time de $manutencaoLabel.</p>
-<h3>Resultado da validacao</h3>
-<table>
-<thead><tr><th>#</th><th>Item</th><th>Valor encontrado</th><th>Status</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>Tipo</td><td>$s1</td><td>$st1</td></tr>
-<tr><td>2</td><td>Descricao do problema</td><td>$s2</td><td>$st2</td></tr>
-<tr><td>3</td><td>Sistema/modulo afetado</td><td>$s3</td><td>$st3</td></tr>
-<tr><td>4</td><td>Caminho no menu</td><td>$s4</td><td>$st4</td></tr>
-<tr><td>5</td><td>Evidencia anexada</td><td>$s5</td><td>$st5</td></tr>
-<tr><td>6</td><td>Analista do Suporte</td><td>$s6</td><td>$st6</td></tr>
-</tbody>
-</table>
-<h3>Itens faltando</h3>
-<ul>
-$listaHtml
-</ul>
-<h3>Como corrigir</h3>
-<p>Preencha os itens marcados como AUSENTE e adicione as informacoes nos comentarios desta issue.<br/>
-Consulte o checklist completo: <em>guias/checklist-abertura-issue.md</em></p>
-<p>&#127991;&#65039; Tag adicionada automaticamente: <code>$TagAlerta</code><br/>
-&#129302; Comentario gerado automaticamente pelo issue-validator-agent</p>
-"@
-
-        # Gravar JSON sem BOM (az CLI falha com BOM)
-        $jsonBody = @{ text = $htmlComentario } | ConvertTo-Json -Depth 5
-        $tempFile = "$env:TEMP\issue-validator-comment.json"
-        [System.IO.File]::WriteAllText($tempFile, $jsonBody, (New-Object System.Text.UTF8Encoding($false)))
-
-        az devops invoke `
-            --area wit --resource comments `
-            --route-parameters project=$Project workItemId=$id `
-            --http-method POST --in-file $tempFile `
-            --api-version "7.1-preview" --output none
-
-        Write-Host "#$id comentario postado"
-
-        # =================================================================
-        # PASSO 5: Adicionar tag sem perder as existentes
-        # =================================================================
-        $tagsAtuais = (az boards work-item show --id $id --output json | ConvertFrom-Json).fields.'System.Tags'
-
-        if ($tagsAtuais -and $tagsAtuais -like "*$TagAlerta*") {
-            Write-Host "#$id ja tem a tag - pulando."
-        }
-        elseif ([string]::IsNullOrWhiteSpace($tagsAtuais) -or $tagsAtuais.Trim() -eq "None") {
-            az boards work-item update --id $id --fields "System.Tags=$TagAlerta" --output none
-            Write-Host "#$id tag aplicada: $TagAlerta"
-        }
-        else {
-            $novasTags = "$($tagsAtuais.Trim()); $TagAlerta"
-            az boards work-item update --id $id --fields "System.Tags=$novasTags" --output none
-            Write-Host "#$id tag aplicada: $novasTags"
-        }
+        [void]$issues.Add([PSCustomObject][ordered]@{
+            id               = [int]$workItemId
+            titulo           = $wi.fields."System.Title"
+            tipoWorkItem     = $wi.fields."System.WorkItemType"
+            createdDate      = $wi.fields."System.CreatedDate"
+            descricaoTexto   = $descText
+            natureza         = $wi.fields."Custom.ZendeskNatureza"
+            modulo           = $moduloVal
+            processo         = $processo
+            tags             = $wi.fields."System.Tags"
+            anexos           = $anexoCount
+            temImagensInline = $temImg
+            jaValidada       = $jaVal
+        })
+        Write-Host "#$workItemId ok"
 
     } catch {
-        $erros += [PSCustomObject]@{ ID = $id; Erro = $_.Exception.Message }
-        Write-Host "#$id ERRO: $($_.Exception.Message)"
+        Write-Host "#$workItemId ERRO: $($_.Exception.Message)"
+        [void]$issues.Add([PSCustomObject][ordered]@{
+            id   = [int]$workItemId
+            erro = $_.Exception.Message
+        })
     }
 }
 
-# --- PASSO 6: Relatorio final ------------------------------------------------
-Write-Host ""
-Write-Host "================================================================"
-Write-Host "  RELATORIO FINAL"
-Write-Host "================================================================"
-Write-Host "Total analisadas: $totalAnalisadas | Completas: $totalCompletas | Incompletas: $totalIncompletas"
-Write-Host ""
-$relatorio | Format-Table -AutoSize
-
-if ($erros.Count -gt 0) {
-    Write-Host ""
-    Write-Host "=== ERROS ==="
-    $erros | Format-Table -AutoSize
-}
-
-# --- PASSO 7: Registrar no historico -----------------------------------------
-$dataHora = Get-Date -Format "yyyy-MM-dd HH:mm"
-$idsLista = if ($idsIncompletas.Count -gt 0) { $idsIncompletas -join ", " } else { "-" }
-$linha    = "| $dataHora | $totalAnalisadas | $totalCompletas | $totalIncompletas | $idsLista |"
-
-$repoRoot = git -C $PSScriptRoot rev-parse --show-toplevel 2>$null
-if (-not $repoRoot) { $repoRoot = Split-Path $PSScriptRoot }
-$histPath = Join-Path $repoRoot "agents\issue-validator-history.md"
-
-if (Test-Path $histPath) {
-    Add-Content -Path $histPath -Value $linha -Encoding UTF8
-    Write-Host ""
-    Write-Host "Historico atualizado em: $histPath"
+# Gerar JSON (garantir array mesmo com 1 elemento)
+if ($issues.Count -eq 0) {
+    $json = "[]"
+} elseif ($issues.Count -eq 1) {
+    $single = $issues[0] | ConvertTo-Json -Depth 5
+    $json = "[$single]"
 } else {
-    Write-Host "AVISO: Arquivo de historico nao encontrado em $histPath"
+    $json = ConvertTo-Json -InputObject $issues.ToArray() -Depth 5
 }
 
+$outPath = Join-Path $env:TEMP "validator-fetch.json"
+[System.IO.File]::WriteAllText($outPath, $json, (New-Object System.Text.UTF8Encoding($false)))
+
 Write-Host ""
-Write-Host "=== Validacao concluida ==="
+Write-Host "Issues retornadas: $($issues.Count) | Excluidas: $totalExcluidas"
+Write-Host "OUTPUT_FILE: $outPath"
+Write-Host "=== Fetch concluido ==="
