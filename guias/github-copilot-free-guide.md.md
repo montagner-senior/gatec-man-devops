@@ -63,3 +63,16 @@ Include:
 Depois disso, seguir normalmente com os prompts que desejarem.
 
 > Pode ser que ele solicite permissão para executar certos passos, necessário selecionar Enable para o Agente seguir com o processo.
+
+---
+
+## Agentes Copilot do time
+
+O repositório `gatec-man-devops` inclui agentes personalizados que automatizam tarefas do time.
+Para usá-los, abra o Copilot Chat (`Ctrl+Alt+I`) e selecione o agente desejado no seletor, ou digite `@nome-do-agente`.
+
+| Agente | O que faz | Comando rápido |
+|--------|-----------|----------------|
+| **Issue Validator** | Valida issues abertas no path Manutenção contra o [checklist de 6 itens](checklist-abertura-issue.md). Posta comentário `#ZD` e tag `abertura-incompleta` nas issues incompletas. | `valida as issues` |
+
+> 📌 Para detalhes completos, veja [Como Usar o Issue Validator Agent](../agents/issue-validator-how-to.md).

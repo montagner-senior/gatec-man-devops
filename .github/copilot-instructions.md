@@ -72,6 +72,7 @@ processos/        → Fluxos passo a passo — Fix, Hotfix, User Story, transbor
 gestao/           → SLA, métricas, cerimônias, capacidade
 pipelines/        → CI build, CD deploy, rollback
 seguranca/        → Acessos e permissões
+agents/           → Agentes Copilot do time (Issue Validator, docs e scripts)
 base-conhecimento/
   achados/        → Registros de investigações técnicas (VB6, banco, sistemas)
   faq-suporte.md  → Perguntas frequentes do Suporte
@@ -87,6 +88,7 @@ base-conhecimento/
 - Ao criar ou atualizar documentação de processo, siga os padrões dos arquivos em `processos/`
 - Ao citar SLA, use os valores de `gestao/sla.md`
 - Ao criar registros de investigação, use o template `base-conhecimento/achados/TEMPLATE-achado.md`
+- Ao responder sobre validação de issues ou o Issue Validator, consulte `agents/issue-validator-validation-criteria.md` e `agents/issue-validator-how-to.md`
 - **Não invente regras** — se algo não estiver documentado, diga explicitamente e sugira criar a documentação
 
 ---

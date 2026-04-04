@@ -1,12 +1,26 @@
 ---
 title: Como Usar o Issue Validator Agent
-parent: Guias
-nav_order: 3
+parent: Agentes
+nav_order: 1
 ---
 
 # Como Usar o Issue Validator Agent
 
-O `issue-validator-agent` valida automaticamente todas as issues com status **New** no path **Manutenção**, adiciona um comentário explicando o que está faltando e aplica a tag `abertura-incompleta` nas issues que não atendem ao checklist.
+O `issue-validator-agent` é um **agente inteligente** que valida issues com status **New** no path **Manutenção**. Diferente de um script com regex, o agente (Claude Sonnet) **lê e compreende** a descrição de cada issue para decidir se tem informação suficiente para o time trabalhar. Quando encontra issues incompletas, adiciona um comentário contextual explicando o que falta e aplica a tag `abertura-incompleta`.
+
+### Arquitetura
+
+```
+Script (data layer)          Agente LLM (cérebro)
+┌────────────────────┐    ┌───────────────────────────────┐
+│  FETCH: busca issues  │────▶│  Lê descrição e avalia cada    │
+│  e grava JSON         │    │  item com inteligência         │
+└────────────────────┘    └────────────┬──────────────────┘
+┌────────────────────┐    ┌────────────┴──────────────────┐
+│  APPLY: posta         │◀────│  Gera comentário contextual    │
+│  comentários + tags    │    │  específico para cada issue    │
+└────────────────────┘    └───────────────────────────────┘
+```
 
 ---
 
@@ -58,33 +72,55 @@ Ctrl + Alt + I
 
 ### 2. Anexe o arquivo do agente
 
-Clique no ícone de clipe 📎 e selecione:
-```
-agents/validador-issues/issue-validator-agent.md
-```
+No seletor de agentes do chat, escolha **Issue Validator**.
 
-Ou arraste o arquivo direto para o campo de texto do chat.
+Ou mencione o agente digitando `@issue-validator` no campo de texto.
 
 ### 3. Digite o comando
 
 ```
-@workspace valida as issues
+valida as issues
 ```
 
-Pronto. O agente vai executar os 6 passos automaticamente e exibir o relatório ao final.
+Pronto. O agente vai executar as 5 fases automaticamente e exibir o relatório ao final.
+
+### Validar issue específica
+
+```
+valide a issue #128340
+```
+
+### Prévia sem postar comentário/tag (dry-run)
+
+```
+roda o validador -DryRun
+```
+
+### Revalidar issues já alertadas
+
+```
+revalida as issues
+```
+
+Busca issues que já receberam tag `abertura-incompleta` e verifica se o Suporte já complementou as informações. Issues agora completas recebem comentário de ✅ e a tag é removida.
+
+### Revalidar issue específica
+
+```
+revalida a issue #128340
+```
 
 ---
 
 ## O que acontece automaticamente
 
-| Passo | Ação |
-|-------|------|
-| 1 | Configura o contexto da organização e projeto |
-| 2 | Busca todas as issues `New` do path `Manutenção` |
-| 3 | Valida cada issue contra os 6 itens do checklist |
-| 4 | Adiciona comentário Markdown em cada issue incompleta |
-| 5 | Aplica a tag `abertura-incompleta` preservando tags existentes |
-| 6 | Exibe o relatório final consolidado |
+| Fase | Quem | Ação |
+|------|------|------|
+| 1 | Agente | Carrega os critérios de validação |
+| 2 | Script | Busca issues `New` do path `Manutenção` e grava JSON |
+| 3 | **Agente** | **Lê a descrição de cada issue e valida com inteligência** |
+| 4 | Script | Posta comentário HTML (com `#ZD`) e aplica tag |
+| 5 | Agente | Apresenta relatório e atualiza histórico |
 
 ---
 
@@ -93,32 +129,60 @@ Pronto. O agente vai executar os 6 passos automaticamente e exibir o relatório 
 ```
 ## ✅ Validação Concluída — Path: Manutenção | Status: New
 
-| ID     | Título                        | Itens faltando                  | Tag                   |
-|--------|-------------------------------|---------------------------------|-----------------------|
-| #1234  | Erro ao emitir NF             | 2. Descrição · 5. Evidência     | abertura-incompleta ✅ |
-| #1235  | Sistema não abre na filial 03 | —                               | —                     |
+| ID     | Título                        | Tipo WI  | Tipo | Desc | Sist | Menu | Evid | Anal | Resultado            |
+|--------|-------------------------------|----------|------|------|------|------|------|------|----------------------|
+| ⚡#1230 | Processo parado na filial 02  | Hotfix   | ✅   | ✅   | ✅   | ✅   | ❌   | ✅   | Incompleta           |
+| #1234  | Erro ao emitir NF             | Fix      | ✅   | ❌   | ✅   | ✅   | ❌   | ✅   | Incompleta           |
+| #1237  | Relatório zerado em Contabil   | US       | ✅   | ✅   | ✅   | ⚠️   | ✅   | ✅   | Completa com ressalva|
+| #1235  | Sistema não abre na filial 03 | US       | ✅   | ✅   | ✅   | ✅   | ✅   | ✅   | Completa             |
+| #1236  | Relatório zerado              | Fix      | -    | -    | -    | -    | -    | -    | Já validada          |
 
-Total analisadas: 2
+Total analisadas: 5
 Completas: 1
-Incompletas: 1 (comentário + tag aplicados automaticamente)
+Completas com ressalva: 1
+Incompletas: 2 (comentário + tag aplicados)
+Já validadas: 1
+Excluídas: 0
+
+Itens mais faltantes: Descrição (1) · Evidência (2)
+
+Tendência: ⬇️ Taxa caiu de 100% para 40% vs execução anterior
+
+Pendentes de correção (alertadas há >2 dias úteis):
+  #1220 — Erro no fechamento (alertada há 3 dias)
+  #1218 — Tela travando (alertada há 5 dias)
+
+Detalhe #1234:
+  2. Descrição — texto atual é apenas "Ver Zendesk #3421", sem relato do problema
+  5. Evidência — nenhum arquivo ou imagem anexado
 ```
 
 ---
 
 ## Checklist de validação
 
-O agente considera uma issue **incompleta** quando qualquer um dos 6 itens abaixo estiver ausente:
+O agente considera uma issue **incompleta** quando qualquer item está ausente.
+**Exceção:** se apenas o item 4 (caminho no menu) está ausente e os outros 5 estão OK, classifica como **"Completa com ressalva"** (sem tag, sem comentário).
 
 | # | Item |
 |---|------|
 | 1 | Tipo — erro, incidente, melhoria ou dúvida |
 | 2 | Descrição do problema |
 | 3 | Sistema ou módulo afetado |
-| 4 | Caminho no menu até a tela |
+| 4 | Caminho no menu até a tela (⚠️ ressalva se único ausente) |
 | 5 | Print ou evidência anexada |
 | 6 | Analista do Suporte responsável |
 
 > Referência completa: `guias/checklist-abertura-issue.md`
+
+## Diferença em relação a um script com regex
+
+| Aspecto | Script com regex | Agente inteligente |
+|---------|-----------------|--------------------|
+| Descrição | Verifica se campo não está vazio | **Lê o texto e avalia se é um relato real** |
+| Caminho no menu | Busca palavras "menu", "tela" | **Entende se a descrição indica ONDE no sistema** |
+| Comentário | Template fixo para todas | **Personalizado com contexto específico** |
+| Falso positivo | "a tela travou" → aprovaria menu | **"a tela travou" sem QUAL tela → recusa** |
 
 ---
 
@@ -131,10 +195,24 @@ Não. Se a issue já tiver um comentário do `issue-validator-agent`, ele pula e
 Não. O agente verifica se a tag `abertura-incompleta` já existe antes de aplicar.
 
 **O agente altera o conteúdo da issue?**
-Não. Ele apenas adiciona comentário e tag — nunca edita título, descrição ou outros campos.
+Não. Ele apenas adiciona/remove comentário e tag — nunca edita título, descrição ou outros campos. Na revalidação, remove a tag `abertura-incompleta` de issues complementadas.
 
 **O token PAT expirou, o que fazer?**
 Gere um novo PAT em `https://gantc.visualstudio.com` e rode novamente:
 ```bash
 az devops login --organization https://gantc.visualstudio.com
 ```
+
+---
+
+## Agendamento (automação)
+
+O agente pode ser executado manualmente a qualquer momento. Para automação:
+
+| Opção | Como |
+|-------|------|
+| **GitHub Actions (cron)** | Crie um workflow `.github/workflows/validate-issues.yml` com `schedule: cron` que execute o agente via CLI |
+| **Tarefa agendada Windows** | Use o Agendador de Tarefas do Windows para rodar o script de FETCH + análise em horário fixo |
+| **Azure DevOps Pipeline** | Pipeline com trigger cron que execute o script de FETCH + LLM + APPLY |
+
+> **Recomendação:** Execute a **validação diariamente** (ex: 08:00) e a **revalidação 2x por semana** (ex: terça e quinta) para fechar o ciclo de feedback com o Suporte.
