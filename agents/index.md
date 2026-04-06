@@ -14,7 +14,7 @@ Agentes GitHub Copilot configurados para auxiliar o time de Manutenção de Sist
 
 | Agente | Descrição | Comando rápido |
 |--------|-----------|----------------|
-| **Issue Validator** | Valida issues abertas no path Manutenção contra o [checklist de 6 itens](../guias/checklist-abertura-issue.md). Adiciona comentário `#ZD` e tag `abertura-incompleta` nas issues incompletas. | `valida as issues` |
+| **Issue Validator** | Valida issues abertas no path Manutenção contra o [checklist de 6 itens](../guias/checklist-abertura-issue.md). Adiciona comentário `#zendesk` e tag `abertura-incompleta` nas issues incompletas. | `valida as issues` |
 
 ---
 

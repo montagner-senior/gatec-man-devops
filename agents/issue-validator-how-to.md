@@ -119,7 +119,7 @@ revalida a issue #128340
 | 1 | Agente | Carrega os critérios de validação |
 | 2 | Script | Busca issues `New` do path `Manutenção` e grava JSON |
 | 3 | **Agente** | **Lê a descrição de cada issue e valida com inteligência** |
-| 4 | Script | Posta comentário HTML (com `#ZD`) e aplica tag |
+| 4 | Script | Posta comentário HTML (com `#zendesk`) e aplica tag |
 | 5 | Agente | Apresenta relatório e atualiza histórico |
 
 ---

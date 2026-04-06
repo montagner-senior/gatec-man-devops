@@ -322,6 +322,34 @@ foreach ($workItemId in $ids) {
         }
         $temImg = ($descHtml -and $descHtml -like "*<img*")
 
+        # Extrair e baixar imagens inline da descricao
+        $imagensLocais = @()
+        if ($descHtml) {
+            $imgMatches = [regex]::Matches($descHtml, '<img[^>]+src="([^"]+)"')
+            if ($imgMatches.Count -gt 0) {
+                $imgDir = Join-Path $env:TEMP "validator-images"
+                if (-not (Test-Path $imgDir)) { New-Item -ItemType Directory -Path $imgDir -Force | Out-Null }
+                $imgIndex = 0
+                foreach ($match in $imgMatches) {
+                    $imgUrl = $match.Groups[1].Value
+                    $imgIndex++
+                    # Extrair nome do arquivo da URL ou gerar um
+                    $urlName = if ($imgUrl -match '[?&]name=([^&]+)') { $Matches[1] } else { "img${imgIndex}.png" }
+                    $localName = "${workItemId}_${imgIndex}_${urlName}"
+                    $localPath = Join-Path $imgDir $localName
+                    try {
+                        Invoke-WebRequest -Uri $imgUrl -OutFile $localPath -UseBasicParsing -TimeoutSec 15 2>$null
+                        if (Test-Path $localPath) {
+                            $imagensLocais += $localPath
+                            Write-Host "#$workItemId imagem $imgIndex baixada: $urlName"
+                        }
+                    } catch {
+                        Write-Host "#$workItemId imagem $imgIndex FALHOU: $($_.Exception.Message)"
+                    }
+                }
+            }
+        }
+
         [void]$issues.Add([PSCustomObject][ordered]@{
             id               = [int]$workItemId
             titulo           = $wi.fields."System.Title"
@@ -334,6 +362,7 @@ foreach ($workItemId in $ids) {
             tags             = $wi.fields."System.Tags"
             anexos           = $anexoCount
             temImagensInline = $temImg
+            imagensLocais    = $imagensLocais
             jaValidada       = $jaVal
         })
         Write-Host "#$workItemId ok"

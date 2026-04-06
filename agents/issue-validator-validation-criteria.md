@@ -21,6 +21,21 @@ Sem os campos abaixo, o dev inicia a investigação completamente às cegas no c
 > Use seu julgamento ao analisar cada item — não use apenas verificação de campo vazio.
 > Leia as descrições e avalie se realmente informam o suficiente para o dev trabalhar.
 
+### Análise de imagens
+
+Quando o campo `imagensLocais` contiver caminhos de arquivo, o agente **deve visualizar
+cada imagem** (usando `view_image`) e extrair informações relevantes para a validação:
+
+- **Caminho no menu:** Se a imagem mostra uma tela do sistema, identifique qual tela é
+  e use como evidência do caminho no menu.
+- **Descrição do problema:** Se a imagem mostra uma mensagem de erro ou comportamento
+  inesperado, use para complementar/validar a descrição textual.
+- **Analista:** Se a imagem contém assinatura, nome ou email de analista, use como evidência.
+- **Evidência:** Imagens baixadas confirmam que a evidência existe e é acessível.
+
+O agente deve mencionar no comentário o que encontrou nas imagens, por exemplo:
+*"Imagem 1 mostra mensagem de erro 'Campo CNPJ inválido' na tela de Cadastro de Fornecedores"*
+
 ---
 
 ## Checklist de validação (6 itens obrigatórios)
@@ -31,7 +46,7 @@ Sem os campos abaixo, o dev inicia a investigação completamente às cegas no c
 | 2 | **Descrição do problema** | `System.Description` | **O agente lê a descrição e avalia se é um relato real.** Não basta ter texto — precisa explicar o que aconteceu. |
 | 3 | **Sistema/módulo afetado** | `Custom.ZendeskModulo` | Campo preenchido com nome específico do módulo. Termos genéricos não contam. |
 | 4 | **Caminho no menu** | `System.Description` | **O agente lê a descrição procurando contexto de localização.** Caminhos de navegação, nomes de tela específicos, ou indicação clara de onde no sistema o problema ocorre. |
-| 5 | **Evidência anexada** | `relations[rel=AttachedFile]` ou `<img>` na descrição | Anexo formal (contagem > 0) ou imagem inline na descrição. |
+| 5 | **Evidência anexada** | `relations[rel=AttachedFile]`, `<img>` na descrição, ou links externos | Anexo formal (contagem > 0), imagem inline na descrição, ou link externo para arquivo de evidência (ex: URLs Zendesk para `.pdf`, `.png`, `.docx`, etc.). |
 | 6 | **Analista do Suporte** | `System.Description` | **O agente lê a descrição procurando nome ou assinatura do analista.** Nomes próprios com sobrenome, emails corporativos, ou assinatura identificável. |
 
 ---
@@ -120,15 +135,29 @@ Não basta a palavra "tela" aparecer — precisa identificar QUAL tela ou menu.
 
 **O que é:** Qualquer arquivo, imagem ou log que demonstre o problema.
 
+**Como o agente valida:** Verifica **três fontes** (basta uma positiva):
+1. Anexos formais: campo `anexos > 0`
+2. Imagens inline: campo `temImagensInline = true`
+3. Links na descrição: **o agente lê `descricaoTexto` procurando URLs** que apontem para
+   arquivos de evidência (ex: `.png`, `.jpg`, `.pdf`, `.docx`, `.xlsx`, `.txt`, `.mp3`, `.mp4`, `.zip`)
+   ou URLs do Zendesk (`cxsenior.zendesk.com/attachments/token/`)
+
+> **IMPORTANTE:** O campo `temImagensInline` pode ser `false` mesmo existindo imagens
+> na descrição original (por limitação do fetch). **O agente DEVE sempre ler `descricaoTexto`**
+> procurando URLs de imagem ou arquivo como verificação adicional.
+
 **Válido:**
 - Screenshot da tela com o erro (anexo ou `<img>` inline)
 - Arquivo de log anexado
 - Qualquer arquivo em `relations[rel=AttachedFile]`
+- Link externo para arquivo de evidência na descrição (URLs do Zendesk apontando para `.pdf`, `.png`, `.jpg`, `.docx`, `.xlsx`, `.txt`, `.mp3`, `.mp4`, `.zip`)
+- URLs de imagem na descrição (ex: `mceclip0.png`, `mceclip1.png`)
 
 **Inválido:**
-- Nenhum anexo
+- Nenhum anexo, nenhuma imagem inline, e nenhum link de evidência na descrição
 - "Print enviado por email" (não está na issue)
 - Link quebrado
+- Menção genérica de evidência sem link ou anexo (ex: "segue evidência" sem nada anexado)
 
 ---
 

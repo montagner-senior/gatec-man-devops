@@ -6,7 +6,7 @@ nav_order: 2
 
 # Modelo Checklist para Suporte Abrir Issue
 
-> 📌 Este checklist é verificado automaticamente pelo agente **Issue Validator**. Issues que não atenderem estes 6 itens recebem comentário `#ZD` e tag `abertura-incompleta`. Veja [como funciona](../agents/issue-validator-how-to.md).
+> 📌 Este checklist é verificado automaticamente pelo agente **Issue Validator**. Issues que não atenderem estes 6 itens recebem comentário `#zendesk` e tag `abertura-incompleta`. Veja [como funciona](../agents/issue-validator-how-to.md).
 
 | # | Item | Campo verificado | Critério de presença |
 |---|---|---|---|

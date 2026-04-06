@@ -73,6 +73,6 @@ Para usá-los, abra o Copilot Chat (`Ctrl+Alt+I`) e selecione o agente desejado 
 
 | Agente | O que faz | Comando rápido |
 |--------|-----------|----------------|
-| **Issue Validator** | Valida issues abertas no path Manutenção contra o [checklist de 6 itens](checklist-abertura-issue.md). Posta comentário `#ZD` e tag `abertura-incompleta` nas issues incompletas. | `valida as issues` |
+| **Issue Validator** | Valida issues abertas no path Manutenção contra o [checklist de 6 itens](checklist-abertura-issue.md). Posta comentário `#zendesk` e tag `abertura-incompleta` nas issues incompletas. | `valida as issues` |
 
 > 📌 Para detalhes completos, veja [Como Usar o Issue Validator Agent](../agents/issue-validator-how-to.md).
