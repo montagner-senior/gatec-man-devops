@@ -12,7 +12,7 @@ Este guia explica os três tipos de work item utilizados pelo time de Manutenç�
 
 ## Os três tipos de Work Item do time
 
-> 📌 **Regra do time:** O time usa **exclusivamente** estes três tipos.
+> 📌 **Regra do time:** O time usa três tipos.
 
 | Tipo | Urgência | Origem | Natureza |
 | --- | --- | --- | --- |
@@ -30,13 +30,12 @@ Este guia explica os três tipos de work item utilizados pelo time de Manutenç�
 
 **Não crie Tasks para:**
 - O atendimento principal do ticket (use User Story, Fix ou Hotfix)
-- Subdivisão de atividades dentro de um mesmo atendimento
 
 ---
 
 ## Timesheet (Apontador)
 
-> 📌 **Regra do time:** O apontamento de horas (Timesheet) deve ser feito **diretamente no User Story, Fix ou Hotfix**. Apontamento em tasks, somente quando tarefas administrativas.
+> 📌 **Regra do time:** O apontamento de horas (Timesheet) deve ser feito **diretamente no User Story, Fix ou Hotfix**. Apontamento em tasks, somente quando tarefas administrativas. (Em Validação)
 
 ---
 
@@ -50,10 +49,10 @@ Este guia explica os três tipos de work item utilizados pelo time de Manutenç�
 
 | Estado | Descrição |
 | --- | --- |
-| New | Na fila para atendimento
+| New | Na fila para atendimento |
 | Active | Em atendimento |
-| Waiting | Esperando por algo ou alguém
-| Closed | Atendimento finalizado
+| Waiting | Esperando por algo ou alguém |
+| Closed | Atendimento finalizado |
 
 ## Discussion
 
@@ -85,8 +84,6 @@ Um **Fix** é a correção de um erro nos sistemas.
 ## Hotfix
 
 Um **Hotfix** é uma correção **urgente** de um erro que está **parando o processo do cliente** e causando impacto direto no negócio. Tem **prioridade máxima** sobre qualquer outra atividade do time.
-
-> ⚠️ **Atenção:** Ao identificar ou receber um Hotfix, **pare o que estiver fazendo** e siga as orientações recebidas pelo Gestor.
 
 **Exemplos:**
 

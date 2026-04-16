@@ -1,5 +1,5 @@
 ---
-title: Checklist de Fechamento de Issue
+title: Checklist de Fechamento de Issue (Em Validação)
 parent: Guias
 nav_order: 3
 ---

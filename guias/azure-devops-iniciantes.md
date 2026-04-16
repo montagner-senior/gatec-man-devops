@@ -16,7 +16,7 @@ O **Azure DevOps** é uma plataforma da Microsoft para gestão de desenvolviment
 
 - **Quadro de tarefas**: onde chegam os tickets do Suporte (via Zendesk) e onde registramos o que estamos fazendo
 - **Histórico de trabalho**: onde ficam registradas todas as atividades, comentários e decisões de cada ticket
-- **Pipeline**: onde o sistema faz o build e o deploy automático dos sistemas VB6
+- **Pipeline**: onde o sistema faz o build e o deploy automático dos sistemas.
 
 > 💡 **Dica:** Pense no Azure DevOps como o "coração" do processo do time — tudo passa por ele.
 
@@ -29,23 +29,19 @@ O **Azure DevOps** é uma plataforma da Microsoft para gestão de desenvolviment
 3. Use seu e-mail corporativo `@gatec.onmicrosoft.com` e sua senha
 4. Após o login, selecione o projeto: **`gantc > Senior Agro Dev`**
 
-> ⚠️ **Atenção:** Se aparecer uma mensagem de "Acesso negado" ou "Você não tem permissão", contate o responsável para solicitar acesso. Não tente criar uma conta por conta própria.
-
 ---
 
 ## Conhecendo a tela principal
 
 Depois de acessar o projeto, você verá o menu lateral esquerdo com as seções principais:
 
-| Ícone | Seção | O que é |
+| Seção | O que é |
 |---|---|---|
-| 🗂️ | **Boards** | Quadro de tarefas — é aqui que você vai trabalhar |
-| 🔧 | **Repos** | Código-fonte — **não usamos esta seção** (nosso código está no SVN) |
-| 🚀 | **Pipelines** | Build e deploy automático |
-| 🧪 | **Test Plans** | Planos de teste — não usamos |
-| 📦 | **Artifacts** | Pacotes — não usamos |
-
-> 📌 **Regra do time:** Nosso trabalho diário acontece exclusivamente em **Boards** e **Pipelines**. Ignore as demais seções por enquanto.
+| **Boards** | Quadro de tarefas — é aqui que você vai trabalhar |
+| **Repos** | Código-fonte — **não usamos esta seção** (nosso código está no SVN) |
+| **Pipelines** | Build e deploy automático |
+| **Test Plans** | Planos de teste — não usamos |
+| **Artifacts** | Pacotes — não usamos |
 
 ---
 
@@ -59,7 +55,7 @@ Para acessar: clique em **Boards** no menu lateral → **Boards** (ou **Backlogs
 
 ### Tipos de Work Item que o time usa
 
-> 📌 **Regra do time:** O time usa **apenas três tipos** de work item. Qualquer outro tipo que apareça no sistema deve ser ignorado ou reportado à gerência.
+> 📌 **Regra do time:** O time usa **três tipos** de work item.
 
 | Tipo | Ícone | Quando aparece |
 |---|---|---|

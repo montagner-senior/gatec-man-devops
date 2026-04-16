@@ -69,23 +69,9 @@ Ao concluir a investigação (mesmo que sem solução definitiva), adicione um c
 
 > 📌 **Dica:** Utilize a tag **`#zd`** no campo Discussion para que o comentário seja enviado ao ticket no Zendesk como **observação interna**.
 
-**Modelo de resposta ao Suporte:**
-
-```
-Resposta para o Suporte — [data]
-
-Analisamos o sistema <nome-do-sistema> e identificamos o seguinte:
-
-[Explicação sem jargão técnico do que foi encontrado]
-
-Ação tomada:
-[ ] Problema resolvido — o que foi feito
-[ ] Fix aberto (#número) — previsão: [data estimada]
-[ ] Hotfix iniciado — em correção agora
-[ ] Aguardando mais informações — precisamos saber: [pergunta]
-```
-
 ### Passo 6 — Encerrar
+
+---
 
 ## Ajustes definidos na integração Zendesk
 
