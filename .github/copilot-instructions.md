@@ -51,19 +51,6 @@ Referência completa: `guias/zendesk-devops.md`
 
 ---
 
-## SLA
-
-| Tipo | Primeira resposta | Resolução |
-|---|---|---|
-| Hotfix | Imediato | Meta: 4h / Máx: 1 dia útil |
-| Ticket Zendesk | 4h em dias úteis | 1–3 dias úteis conforme complexidade |
-| Fix | N/A (interno) | Dentro do sprint — meta: 5 dias úteis |
-| User Story | 2 dias úteis | Definido no planejamento do sprint |
-
-Referência completa: `gestao/sla.md`
-
----
-
 ## Estrutura do workspace
 
 ```

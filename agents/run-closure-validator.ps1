@@ -1,29 +1,32 @@
 # =============================================================================
-# run-validator.ps1 - Issue Validator Agent (Data Layer)
+# run-closure-validator.ps1 - Issue Closure Validator Agent (Data Layer)
 # Dois modos:
-#   FETCH (padrao): Busca issues e grava JSON para o agente (LLM) analisar.
+#   FETCH (padrao): Busca issues Closed e grava JSON para o agente (LLM) analisar.
 #   APPLY (-Apply): Le resultados do agente e posta comentarios/tags.
 #
 # O agente (LLM) e o cerebro: ele analisa cada issue com inteligencia,
-# decide o que esta faltando, e gera comentarios contextuais.
+# decide se a conclusao esta bem documentada, e gera comentarios contextuais.
 # Este script e apenas o data layer (busca + acao).
 #
 # Uso:
-#   & agents\run-validator.ps1                              # Fetch todas
-#   & agents\run-validator.ps1 -Top 3                       # Fetch limitado
-#   & agents\run-validator.ps1 -Id 128340                   # Fetch por ID
-#   & agents\run-validator.ps1 -Id 128340,128257            # Multiplos IDs
-#   & agents\run-validator.ps1 -Apply results.json          # Aplicar resultados
-#   & agents\run-validator.ps1 -Revalidate                  # Revalidar com tag
-#   & agents\run-validator.ps1 -Apply results.json -DryRun  # Preview
+#   & agents\run-closure-validator.ps1                              # Fetch todas (7 dias)
+#   & agents\run-closure-validator.ps1 -Top 3                       # Fetch limitado
+#   & agents\run-closure-validator.ps1 -Id 128340                   # Fetch por ID
+#   & agents\run-closure-validator.ps1 -Id 128340,128257            # Multiplos IDs
+#   & agents\run-closure-validator.ps1 -Apply results.json          # Aplicar resultados
+#   & agents\run-closure-validator.ps1 -Revalidate                  # Revalidar com tag
+#   & agents\run-closure-validator.ps1 -Apply results.json -DryRun  # Preview
+#   & agents\run-closure-validator.ps1 -Days 14                     # Ultimos 14 dias
 # =============================================================================
 
 param(
     [string]$Organization = "https://gantc.visualstudio.com",
     [string]$Project      = "Senior Agro Dev",
     [string]$AreaPath     = "Senior Agro Dev\Torre Manutencao",
-    [string]$TagAlerta    = "abertura-incompleta",
+    [string]$TagAlerta    = "conclusao-incompleta",
+    [string]$TagCompleta  = "conclusao-validada",
     [int]$Top             = 0,
+    [int]$Days            = 7,
     [int[]]$Id            = @(),
     [string]$Apply        = "",
     [switch]$Revalidate,
@@ -82,9 +85,9 @@ if ($Apply -ne "") {
         }
 
         try {
-            # Postar comentario HTML
+            # Postar comentario HTML (SEM #zd - interno Azure DevOps)
             $bodyJson = @{ text = $r.comentarioHtml } | ConvertTo-Json -Depth 5
-            $tempFile = [System.IO.Path]::Combine($env:TEMP, "issue-validator-comment-$rid.json")
+            $tempFile = [System.IO.Path]::Combine($env:TEMP, "closure-validator-comment-$rid.json")
             [System.IO.File]::WriteAllText($tempFile, $bodyJson, (New-Object System.Text.UTF8Encoding($false)))
 
             az devops invoke `
@@ -104,7 +107,7 @@ if ($Apply -ne "") {
             $acao = if ($r.acao) { $r.acao } else { "incompleta" }
 
             if ($acao -eq "complementada") {
-                # Remover tag abertura-incompleta
+                # Remover tag conclusao-incompleta
                 $tagsAtuais = $r.tags
                 if ($tagsAtuais -and $tagsAtuais -like "*$TagAlerta*") {
                     $tagsList = ($tagsAtuais -split ";\s*") | Where-Object { $_.Trim() -ne $TagAlerta -and $_.Trim() -ne "" }
@@ -121,24 +124,23 @@ if ($Apply -ne "") {
                 }
             }
             elseif ($acao -eq "completa") {
-                # Adicionar tag abertura-completa
-                $tagCompleta = "abertura-completa"
+                # Adicionar tag conclusao-validada
                 $tagsAtuais = $r.tags
 
-                if ($tagsAtuais -and $tagsAtuais -like "*$tagCompleta*") {
-                    Write-Host "#$rid tag $tagCompleta ja existe"
+                if ($tagsAtuais -and $tagsAtuais -like "*$TagCompleta*") {
+                    Write-Host "#$rid tag $TagCompleta ja existe"
                 }
                 elseif ([string]::IsNullOrWhiteSpace($tagsAtuais) -or $tagsAtuais.Trim() -eq "None") {
-                    az boards work-item update --id $rid --fields "System.Tags=$tagCompleta" --output none
+                    az boards work-item update --id $rid --fields "System.Tags=$TagCompleta" --output none
                     if ($LASTEXITCODE -ne 0) {
                         Write-Host "#$rid ERRO ao aplicar tag"
                         $erros++
                         continue
                     }
-                    Write-Host "#$rid tag: $tagCompleta"
+                    Write-Host "#$rid tag: $TagCompleta"
                 }
                 else {
-                    $novasTags = "$($tagsAtuais.Trim()); $tagCompleta"
+                    $novasTags = "$($tagsAtuais.Trim()); $TagCompleta"
                     az boards work-item update --id $rid --fields "System.Tags=$novasTags" --output none
                     if ($LASTEXITCODE -ne 0) {
                         Write-Host "#$rid ERRO ao aplicar tag"
@@ -149,7 +151,7 @@ if ($Apply -ne "") {
                 }
             }
             else {
-                # Adicionar tag preservando existentes
+                # Adicionar tag conclusao-incompleta preservando existentes
                 $tagsAtuais = $r.tags
 
                 if ($tagsAtuais -and $tagsAtuais -like "*$TagAlerta*") {
@@ -190,7 +192,7 @@ if ($Apply -ne "") {
 }
 
 # =============================================================================
-# MODO FETCH (padrao) - Busca issues e grava JSON para o agente analisar
+# MODO FETCH (padrao) - Busca issues Closed e grava JSON para o agente analisar
 # =============================================================================
 Write-Host "=== MODO FETCH ==="
 
@@ -206,7 +208,7 @@ WHERE [System.TeamProject] = '$Project'
   AND [System.WorkItemType] IN ('Fix', 'Hotfix', 'User Story')
   AND [System.AreaPath] = '$AreaPath'
   AND [System.Tags] CONTAINS '$TagAlerta'
-ORDER BY [System.CreatedDate] DESC
+ORDER BY [System.ChangedDate] DESC
 "@
 
     $queryResult = az boards query --wiql $wiql --output json 2>$null | ConvertFrom-Json
@@ -229,16 +231,21 @@ ORDER BY [System.CreatedDate] DESC
 
     Write-Host "Issues com tag encontradas: $($ids.Count)"
 } else {
+    # Buscar issues Closed nos ultimos N dias, sem tags de validacao de conclusao
+    $dataLimite = (Get-Date).AddDays(-$Days).ToString("yyyy-MM-dd")
+    Write-Host "Buscando issues Closed desde $dataLimite (ultimos $Days dias)"
+
     $wiql = @"
 SELECT [System.Id], [System.Title]
 FROM WorkItems
 WHERE [System.TeamProject] = '$Project'
   AND [System.WorkItemType] IN ('Fix', 'Hotfix', 'User Story')
   AND [System.AreaPath] = '$AreaPath'
-  AND [System.State] = 'New'
-  AND [System.AssignedTo] = ''
+  AND [System.State] = 'Closed'
+  AND [System.ChangedDate] >= '$dataLimite'
+  AND NOT [System.Tags] CONTAINS '$TagCompleta'
   AND NOT [System.Tags] CONTAINS '$TagAlerta'
-ORDER BY [System.CreatedDate] DESC
+ORDER BY [System.ChangedDate] DESC
 "@
 
     $queryResult = az boards query --wiql $wiql --output json 2>$null | ConvertFrom-Json
@@ -264,7 +271,7 @@ ORDER BY [System.CreatedDate] DESC
 
 if (-not $ids -or $ids.Count -eq 0) {
     Write-Host "Nenhuma issue elegivel."
-    $outPath = Join-Path $env:TEMP "validator-fetch.json"
+    $outPath = Join-Path $env:TEMP "closure-validator-fetch.json"
     [System.IO.File]::WriteAllText($outPath, "[]", (New-Object System.Text.UTF8Encoding($false)))
     Write-Host "OUTPUT_FILE: $outPath"
     exit 0
@@ -295,7 +302,7 @@ foreach ($workItemId in $ids) {
             continue
         }
 
-        # Verificar idempotencia (ja tem comentario do validador?)
+        # Buscar comentarios da Discussion (fonte principal para validacao de conclusao)
         $commentsRaw = az devops invoke `
             --area wit --resource comments `
             --route-parameters project=$Project workItemId=$workItemId `
@@ -305,18 +312,19 @@ foreach ($workItemId in $ids) {
         $jaVal = $false
         $comentariosDiscussion = @()
         if ($commentsRaw.comments) {
-            $jaVal = [bool]($commentsRaw.comments | Where-Object { $_.text -like "*issue-validator-agent*" })
-            # Extrair comentarios da discussion (excluindo os do validador)
+            $jaVal = [bool]($commentsRaw.comments | Where-Object { $_.text -like "*closure-validator-agent*" })
+            # Extrair todos os comentarios da discussion
             foreach ($c in $commentsRaw.comments) {
-                if ($c.text -like "*issue-validator-agent*") { continue }
-                if ($c.text -like "*#zd*" -and $c.text -like "*Validacao de Qualidade*") { continue }
+                # Pular comentarios do proprio closure-validator
+                if ($c.text -like "*closure-validator-agent*") { continue }
                 $cText = ($c.text -replace "<[^>]+>", " ") -replace "&nbsp;", " "
                 $cText = ($cText -replace "\s+", " ").Trim()
-                if ($cText.Length -gt 10) {
+                if ($cText.Length -gt 3) {
                     $comentariosDiscussion += [PSCustomObject]@{
-                        autor = $c.createdBy.displayName
-                        data  = $c.createdDate
-                        texto = $cText
+                        autor   = $c.createdBy.displayName
+                        data    = $c.createdDate
+                        texto   = $cText
+                        temZD   = ($c.text -like "*#zd*")
                     }
                 }
             }
@@ -330,39 +338,10 @@ foreach ($workItemId in $ids) {
             $descText = ($descText -replace "\s+", " ").Trim()
         }
 
-        # Contar anexos e verificar imagens inline
-        $anexoCount = 0
-        if ($wi.relations) {
-            $anexoCount = @($wi.relations | Where-Object { $_.rel -eq "AttachedFile" }).Count
-        }
-        $temImg = ($descHtml -and $descHtml -like "*<img*")
-
-        # Extrair e baixar imagens inline da descricao
-        $imagensLocais = @()
-        if ($descHtml) {
-            $imgMatches = [regex]::Matches($descHtml, '<img[^>]+src="([^"]+)"')
-            if ($imgMatches.Count -gt 0) {
-                $imgDir = Join-Path $env:TEMP "validator-images"
-                if (-not (Test-Path $imgDir)) { New-Item -ItemType Directory -Path $imgDir -Force | Out-Null }
-                $imgIndex = 0
-                foreach ($match in $imgMatches) {
-                    $imgUrl = $match.Groups[1].Value
-                    $imgIndex++
-                    # Extrair nome do arquivo da URL ou gerar um
-                    $urlName = if ($imgUrl -match '[?&]name=([^&]+)') { $Matches[1] } else { "img${imgIndex}.png" }
-                    $localName = "${workItemId}_${imgIndex}_${urlName}"
-                    $localPath = Join-Path $imgDir $localName
-                    try {
-                        Invoke-WebRequest -Uri $imgUrl -OutFile $localPath -UseBasicParsing -TimeoutSec 15 2>$null
-                        if (Test-Path $localPath) {
-                            $imagensLocais += $localPath
-                            Write-Host "#$workItemId imagem $imgIndex baixada: $urlName"
-                        }
-                    } catch {
-                        Write-Host "#$workItemId imagem $imgIndex FALHOU: $($_.Exception.Message)"
-                    }
-                }
-            }
+        # Dados de fechamento
+        $closedDate = $wi.fields."Microsoft.VSTS.Common.ClosedDate"
+        if (-not $closedDate) {
+            $closedDate = $wi.fields."System.ChangedDate"
         }
 
         [void]$issues.Add([PSCustomObject][ordered]@{
@@ -370,15 +349,14 @@ foreach ($workItemId in $ids) {
             titulo           = $wi.fields."System.Title"
             tipoWorkItem     = $wi.fields."System.WorkItemType"
             createdDate      = $wi.fields."System.CreatedDate"
+            closedDate       = $closedDate
+            assignedTo       = $wi.fields."System.AssignedTo".displayName
             descricaoTexto   = $descText
             comentarios      = $comentariosDiscussion
             natureza         = $wi.fields."Custom.ZendeskNatureza"
             modulo           = $moduloVal
             processo         = $processo
             tags             = $wi.fields."System.Tags"
-            anexos           = $anexoCount
-            temImagensInline = $temImg
-            imagensLocais    = $imagensLocais
             jaValidada       = $jaVal
         })
         Write-Host "#$workItemId ok"
@@ -402,7 +380,7 @@ if ($issues.Count -eq 0) {
     $json = ConvertTo-Json -InputObject $issues.ToArray() -Depth 5
 }
 
-$outPath = Join-Path $env:TEMP "validator-fetch.json"
+$outPath = Join-Path $env:TEMP "closure-validator-fetch.json"
 [System.IO.File]::WriteAllText($outPath, $json, (New-Object System.Text.UTF8Encoding($false)))
 
 Write-Host ""

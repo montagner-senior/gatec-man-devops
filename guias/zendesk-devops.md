@@ -67,7 +67,7 @@ Próximo passo:
 
 Ao concluir a investigação (mesmo que sem solução definitiva), adicione um comentário em linguagem acessível para que o Suporte possa repassar ao cliente:
 
-> 📌 **Dica:** Utilize a tag **`#zendesk`** no campo Discussion para que o comentário seja enviado ao ticket no Zendesk como **observação interna**.
+> 📌 **Dica:** Utilize a tag **`#zd`** no campo Discussion para que o comentário seja enviado ao ticket no Zendesk como **observação interna**.
 
 **Modelo de resposta ao Suporte:**
 
@@ -109,4 +109,4 @@ Os seguintes ajustes foram alinhados entre o time de Manutenção e o Suporte pa
 
 > 📌 **Regra do time:** Todo ticket vindo do Zendesk deve ter, ao final, um comentário de "Resposta ao Suporte" no work item — mesmo que a resposta seja "não foi possível reproduzir o problema".
 
-> 💡 **Automação:** O agente **Issue Validator** verifica automaticamente se as issues abertas no path Manutenção estão com os 6 campos obrigatórios preenchidos. Issues incompletas recebem um comentário `#zendesk` (visível ao Suporte no Zendesk) informando o que está faltando. Veja [Como Usar o Issue Validator](../agents/issue-validator-how-to.md).
+> 💡 **Automação:** O agente **Issue Validator** verifica automaticamente se as issues abertas no path Manutenção estão com os 6 campos obrigatórios preenchidos. Issues incompletas recebem um comentário `#zd` (visível ao Suporte no Zendesk) informando o que está faltando. Veja [Como Usar o Issue Validator](../agents/issue-validator-how-to.md).

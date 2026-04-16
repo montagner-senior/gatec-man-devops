@@ -6,7 +6,7 @@ nav_order: 2
 
 # Modelo Checklist para Suporte Abrir Issue
 
-> 📌 Este checklist é verificado automaticamente pelo agente **Issue Validator**. Issues que não atenderem estes 6 itens recebem comentário `#zendesk` e tag `abertura-incompleta`. Veja [como funciona](../agents/issue-validator-how-to.md).
+> 📌 Este checklist é verificado automaticamente pelo agente **Issue Validator**. Issues que não atenderem estes 7 itens recebem comentário `#zd` e tag `abertura-incompleta`. Veja [como funciona](../agents/issue-validator-how-to.md).
 
 | # | Item | Campo verificado | Critério de presença |
 |---|---|---|---|
@@ -16,4 +16,5 @@ nav_order: 2
 | 4 | **Caminho no menu** | `System.Description` | O agente avalia semanticamente se indica ONDE no sistema (ex: "Menu → Tela") |
 | 5 | **Evidência anexada** | `relations[rel=AttachedFile]` ou `<img>` | Anexo formal ou imagem inline |
 | 6 | **Analista do Suporte** | `System.Description` | O agente lê a descrição procurando nome do analista (assinatura, email, ou menção explícita) |
+| 7 | **Versão** | `System.Description` | O agente lê a descrição e comentários procurando marcadores de versão (`Ver.`, `Versão`, `Versao`, `v` + número) |
 

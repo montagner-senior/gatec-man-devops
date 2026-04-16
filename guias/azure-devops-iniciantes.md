@@ -93,7 +93,7 @@ New → Active → Wating → Closed
 | **Atribuído a** | Para quem o work item está designado |
 | **Área / Iteração** | A qual sistema e sprint pertence |
 | **Descrição** | Detalhes do que foi reportado pelo Suporte |
-| **Comentários** | Histórico de atualizações — **onde você vai escrever**. Use a tag `#zendesk` para enviar o comentário ao ticket no Zendesk como observação interna |
+| **Comentários** | Histórico de atualizações — **onde você vai escrever**. Use a tag `#zd` para enviar o comentário ao ticket no Zendesk como observação interna |
 | **Ticket Zendesk** | Link para o chamado original do cliente |
 
 ---

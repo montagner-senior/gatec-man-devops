@@ -119,7 +119,7 @@ revalida a issue #128340
 | 1 | Agente | Carrega os critérios de validação |
 | 2 | Script | Busca issues `New` do path `Manutenção` e grava JSON |
 | 3 | **Agente** | **Lê a descrição de cada issue e valida com inteligência** |
-| 4 | Script | Posta comentário HTML (com `#zendesk`) e aplica tag |
+| 4 | Script | Posta comentário HTML (com `#zd`) e aplica tag |
 | 5 | Agente | Apresenta relatório e atualiza histórico |
 
 ---
@@ -129,13 +129,13 @@ revalida a issue #128340
 ```
 ## ✅ Validação Concluída — Path: Manutenção | Status: New
 
-| ID     | Título                        | Tipo WI  | Tipo | Desc | Sist | Menu | Evid | Anal | Resultado            |
-|--------|-------------------------------|----------|------|------|------|------|------|------|----------------------|
-| ⚡#1230 | Processo parado na filial 02  | Hotfix   | ✅   | ✅   | ✅   | ✅   | ❌   | ✅   | Incompleta           |
-| #1234  | Erro ao emitir NF             | Fix      | ✅   | ❌   | ✅   | ✅   | ❌   | ✅   | Incompleta           |
-| #1237  | Relatório zerado em Contabil   | US       | ✅   | ✅   | ✅   | ⚠️   | ✅   | ✅   | Completa com ressalva|
-| #1235  | Sistema não abre na filial 03 | US       | ✅   | ✅   | ✅   | ✅   | ✅   | ✅   | Completa             |
-| #1236  | Relatório zerado              | Fix      | -    | -    | -    | -    | -    | -    | Já validada          |
+| ID     | Título                        | Tipo WI  | Tipo | Desc | Sist | Menu | Evid | Anal | Vers | Resultado            |
+|--------|-------------------------------|----------|------|------|------|------|------|------|------|----------------------|
+| ⚡#1230 | Processo parado na filial 02  | Hotfix   | ✅   | ✅   | ✅   | ✅   | ❌   | ✅   | ✅   | Incompleta           |
+| #1234  | Erro ao emitir NF             | Fix      | ✅   | ❌   | ✅   | ✅   | ❌   | ✅   | ❌   | Incompleta           |
+| #1237  | Relatório zerado em Contabil   | US       | ✅   | ✅   | ✅   | ⚠️   | ✅   | ✅   | ✅   | Completa com ressalva|
+| #1235  | Sistema não abre na filial 03 | US       | ✅   | ✅   | ✅   | ✅   | ✅   | ✅   | ✅   | Completa             |
+| #1236  | Relatório zerado              | Fix      | -    | -    | -    | -    | -    | -    | -    | Já validada          |
 
 Total analisadas: 5
 Completas: 1
@@ -162,7 +162,7 @@ Detalhe #1234:
 ## Checklist de validação
 
 O agente considera uma issue **incompleta** quando qualquer item está ausente.
-**Exceção:** se apenas o item 4 (caminho no menu) está ausente e os outros 5 estão OK, classifica como **"Completa com ressalva"** (sem tag, sem comentário).
+**Exceção:** se apenas o item 4 (caminho no menu) está ausente e os outros 6 estão OK, classifica como **"Completa com ressalva"** (sem tag, sem comentário).
 
 | # | Item |
 |---|------|
@@ -172,6 +172,7 @@ O agente considera uma issue **incompleta** quando qualquer item está ausente.
 | 4 | Caminho no menu até a tela (⚠️ ressalva se único ausente) |
 | 5 | Print ou evidência anexada |
 | 6 | Analista do Suporte responsável |
+| 7 | Versão do sistema |
 
 > Referência completa: `guias/checklist-abertura-issue.md`
 

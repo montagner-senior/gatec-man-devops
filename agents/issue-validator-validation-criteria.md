@@ -21,6 +21,33 @@ Sem os campos abaixo, o dev inicia a investigação completamente às cegas no c
 > Use seu julgamento ao analisar cada item — não use apenas verificação de campo vazio.
 > Leia as descrições e avalie se realmente informam o suficiente para o dev trabalhar.
 
+### Fontes de informação
+
+O agente analisa **três fontes** para validar cada item do checklist. Basta encontrar
+a informação em **qualquer uma** delas:
+
+1. **`descricaoTexto`** — Descrição principal da issue (campo Description)
+2. **`comentarios`** — Comentários da Discussion (adicionados pelo Suporte após a abertura)
+3. **`imagensLocais`** — Imagens inline baixadas (analisadas visualmente)
+
+> **IMPORTANTE:** O time de Suporte frequentemente complementa a issue via comentários
+> na Discussion em vez de editar a descrição. O agente **deve ler todos os comentários**
+> procurando informações que completem os campos do checklist (descrição do problema,
+> caminho no menu, evidência, analista).
+
+### Análise de comentários (Discussion)
+
+Quando o campo `comentarios` contiver itens, o agente **deve ler cada comentário**
+e extrair informações relevantes:
+
+- **Descrição do problema:** Detalhes adicionais, mensagens de erro, contexto
+- **Caminho no menu:** Referências a telas, menus ou funcionalidades
+- **Evidência:** Links para arquivos ou imagens em comentários
+- **Analista:** Nome do autor do comentário pode ser o analista responsável
+
+O agente deve mencionar no quadro quando a informação veio de um comentário:
+*"ok (via comentário de João Silva em 2026-04-01)"*
+
 ### Análise de imagens
 
 Quando o campo `imagensLocais` contiver caminhos de arquivo, o agente **deve visualizar
@@ -38,7 +65,7 @@ O agente deve mencionar no comentário o que encontrou nas imagens, por exemplo:
 
 ---
 
-## Checklist de validação (6 itens obrigatórios)
+## Checklist de validação (7 itens obrigatórios)
 
 | # | Item | Campo API | Como o agente valida |
 |---|---|---|---|
@@ -47,7 +74,8 @@ O agente deve mencionar no comentário o que encontrou nas imagens, por exemplo:
 | 3 | **Sistema/módulo afetado** | `Custom.ZendeskModulo` | Campo preenchido com nome específico do módulo. Termos genéricos não contam. |
 | 4 | **Caminho no menu** | `System.Description` | **O agente lê a descrição procurando contexto de localização.** Caminhos de navegação, nomes de tela específicos, ou indicação clara de onde no sistema o problema ocorre. |
 | 5 | **Evidência anexada** | `relations[rel=AttachedFile]`, `<img>` na descrição, ou links externos | Anexo formal (contagem > 0), imagem inline na descrição, ou link externo para arquivo de evidência (ex: URLs Zendesk para `.pdf`, `.png`, `.docx`, etc.). |
-| 6 | **Analista do Suporte** | `System.Description` | **O agente lê a descrição procurando nome ou assinatura do analista.** Nomes próprios com sobrenome, emails corporativos, ou assinatura identificável. |
+| 6 | **Analista do Suporte** | `System.Description` | **O agente lê a descrição procurando nome ou assinatura do analista.** Nome próprio (mesmo sem sobrenome), emails corporativos, ou assinatura identificável. |
+| 7 | **Versão** | `System.Description` | **O agente lê a descrição e comentários procurando a versão do sistema.** Marcadores como `Ver.`, `Versão`, `Versao`, `v` seguido de número. |
 
 ---
 
@@ -125,7 +153,7 @@ Não basta a palavra "tela" aparecer — precisa identificar QUAL tela ou menu.
 - "A tela ficou em branco" — diz "tela" mas não diz QUAL tela
 - "O sistema trava" — sem indicação de onde
 
-> **Nota:** Se os 5 itens restantes (1,2,3,5,6) estão OK e apenas o caminho no menu
+> **Nota:** Se os 6 itens restantes (1,2,3,5,6,7) estão OK e apenas o caminho no menu
 > está ausente, o agente classifica como **"Completa com ressalva"** em vez de incompleta.
 > Nesse caso, NÃO aplica tag nem posta comentário — apenas registra ⚠️ no relatório.
 
@@ -165,20 +193,51 @@ Não basta a palavra "tela" aparecer — precisa identificar QUAL tela ou menu.
 
 **O que é:** Nome do analista de suporte responsável pelo ticket.
 
-**Como o agente valida:** Leia a descrição procurando identificação do analista responsável.
+**Como o agente valida:** Leia a descrição **inteira, incluindo o final do texto** procurando
+identificação do analista responsável. Muitas vezes a assinatura ou campo `[ANALISTA DE SUPORTE]`
+aparece nas **últimas linhas** da descrição.
 Pode aparecer como assinatura, email corporativo, ou menção explícita de quem está atendendo.
+
+> **IMPORTANTE:** Não truncar a leitura da descrição. O analista frequentemente está no final
+> do texto, após seções como `[CONEXAO]` ou `[SIMULACAO]`.
 
 **Válido:**
 - "Atenciosamente, João Silva" — assinatura com nome completo
 - "joao.silva@empresa.com.br" — email identificável
 - "Analista responsável: Maria Santos"
 - "Atendido por: Carlos Oliveira"
-- Qualquer nome próprio + sobrenome que identifique o responsável
+- "[ANALISTA DE SUPORTE] Evandro Gandelini" — campo estruturado com nome
+- "Débora" — primeiro nome é suficiente para identificar o analista
+- Qualquer nome próprio que identifique o responsável (com ou sem sobrenome)
 
 **Inválido:**
 - Nenhuma identificação de analista na descrição
-- Apenas primeiro nome sem sobrenome ("João" — genérico demais)
 - "Suporte" — não identifica pessoa específica
+- Termos genéricos como "equipe", "atendente", "suporte técnico"
+
+---
+
+### 7. Versão
+
+**O que é:** Versão do sistema em que o problema foi identificado.
+
+**Como o agente valida:** Leia a descrição e comentários procurando marcadores de versão.
+O campo é texto livre, então o formato pode variar. Procure por:
+- Prefixos: `Ver.`, `Versão`, `Versao`, `Version`
+- Padrão `v` + número: `v9.2`, `v2024`, `v9.2.1`
+- Números de versão próximos a palavras-chave de versão
+
+**Válido:**
+- "Ver. 9.2.1"
+- "Versão 2024.04.01"
+- "v9.2"
+- "Versao 9.2.1.3"
+- "versão do sistema: 9.2"
+
+**Inválido:**
+- Nenhuma menção de versão na descrição ou comentários
+- Número solto sem contexto de versão (ex: "9" isolado)
+- "Versão atual" — sem o número
 
 ---
 
@@ -188,3 +247,4 @@ Pode aparecer como assinatura, email corporativo, ou menção explícita de quem
 |------|-----------|-------------|
 | 2025 | Criação inicial com 3 critérios | Time de Manutenção |
 | 2026-04 | Expandido para 6 critérios alinhados com script e checklist | Time de Manutenção |
+| 2026-04-07 | Adicionado item 7: Versão | Time de Manutenção |
