@@ -1,0 +1,24 @@
+Everyone A migração do ADO foi concluída com sucesso!
+ 
+Alguns tipos de work items que não existem no ambiente novo, foram migrados para os types equivalentes.
+ 
+Issue, Fix e Hotfix > Bug
+Documentation > Documentação
+Administrative Task > HADM
+Deployment Task > Deploy
+ 
+A reforçando as regras da migração, a data de corte foi baseada no ChangedDate, 1 ano para Epics, 4 meses para todo o resto. Work items nos states Closed, Removed ou Canceled não foram migrados, bem como work items dos tipos Test Suite, Test Plan, e Product também não foram.
+ 
+Items com state New ficaram com New na org nova, e todos os outros states ficam como Active, então aqui peço pra que cada time dê uma olhada no board antigo e ajuste os states dos work items conforme estavam no board.
+ 
+O link para o work item antigo, fica no campo ReflectedWorkItemId, vocês podem usar esse campo também para filtar pelo ID usando o filtro Contains, já que o ID do work item fica no final do link. 
+ 
+Como o migrador de ADO > ADO tenta sempre fazer a migração mais completa possível, pode ser que vocês vejam algumas coisas estranhas no histórico, principalmente de work items criados há mais tempo, como por exemplo um work item criado ano passado, mas no histórico dizendo que foi criado no projeto ERP - GATEC que é esse novo, isso é esperado, sem isso a migração não seria possível.
+ 
+Se vocês verem algumas tags estranhas com algum desses nomes: simple-farm-mg, torreA-simplefarm, sf-commodities, sf-commodities-trading, sf-commodities-commerce, torreB-simplefarm, simplefarm-agricola, first-migration-batch, migrated-full, migration-attachment-error, attachment-uploaded. Podem ignorar, foram tags que eu fui usando para marcar alguns problemas que fui encontrando durante a migração e resolvendo, e achei melhor deixar marcado para consulta caso necessário. Como o migrador tenta migrar exatamente do jeito que está lá na origem, ele acaba sendo mais propenso a erros também, por isso essas tags marcando os work items. Inclusive, se vocês acharem que essas tags atrapalham, podem remover.
+ 
+Se precisarem de ajuda sobre o ADO, podem falar comigo ou com as agilistas caso seja uma dúvida de como usar algum type, ou qual opção usar em um campo específico e coisas de uso do ADO. Porém sempre peço que caso tenham dúvidas de uso de campos customizados ou tipos de Item, primeiro deem uma olhada na documentação (Azure.aspx), porque tem muita coisa lá, e caso esteja faltando algo iremos adicionar.
+ 
+Caso tenham algum problema com permissão, ou acesso podem me chamar diretamente também!
+ 
+Obrigado pela colaboração! 

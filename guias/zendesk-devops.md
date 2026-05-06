@@ -8,56 +8,75 @@ nav_order: 5
 
 ## Objetivo
 
-Explicar como funciona a integração automática entre o sistema de suporte ao cliente (Zendesk) e o Azure DevOps — por onde os tickets chegam ao time de Manutenção, como identificar a origem de um work item e o que o dev deve fazer ao recebê-lo.
+Explicar como funciona a integração automática entre o **Zendesk** (suporte ao cliente) e o **Azure DevOps ERPGA Tech** — por onde os tickets chegam ao time de Manutenção e o que o dev deve fazer ao recebê-los.
 
-## Como funciona a integração
+---
 
-O Suporte utiliza o **Zendesk** para registrar e gerenciar os chamados dos clientes. Quando um chamado ultrapassa a capacidade técnica do Suporte (ou seja, exige análise de código-fonte), ele é enviado para o time de Manutenção.
-
-Acontece de forma **totalmente automática**:
+## Como funciona
 
 ```
 Cliente reporta problema ao Suporte
        ↓
-Suporte abre ou atualiza o chamado no Zendesk
+Suporte abre/atualiza o chamado no Zendesk (path: Manutenção)
        ↓
-Suporte entende que o chamado precisa ir para a equipe técnica
+Integração cria um Bug ou User Story no Azure DevOps (ERPGA Tech)
        ↓
-Integração cria um Work Item no Azure DevOps
+Work Item aparece na fila do time (Boards → Backlogs)
        ↓
-Work Item aparece na fila do time de Manutenção (Boards → Backlogs)
+Dev recebe, investiga e atualiza o work item
        ↓
-Dev recebe, investiga e atualiza o Work Item
+Dev fecha o work item com comentário #zd (vai ao Zendesk)
 ```
 
-> 📌 **Regra do time:** O dev **nunca cria** o work item inicial de um ticket de cliente. Ele **sempre chega** via Zendesk. Criar manualmente seria duplicar o ticket e quebrar o rastreamento com o Suporte.
+> 📌 **Regra do time:** O dev **nunca cria** o work item inicial de um ticket de cliente — ele **sempre chega** via Zendesk. Criar manualmente duplica o ticket e quebra o rastreamento com o Suporte.
 
-## O que fazer ao receber um Work Item do Zendesk
+---
+
+## O que a integração preenche automaticamente
+
+Bugs vindos do Zendesk chegam com:
+
+- **Aba Zendesk** preenchida (ticket de origem, módulo, dados do solicitante)
+- Campo **Priority** (vindo do Zendesk — **não editar**)
+- Campo **Natureza** já definido — para Bug, **não é editável** após a chegada via Zendesk
+
+> ⚠️ **Severidade × Priority:**
+>
+> - **Priority** vem do Zendesk e **não deve ser alterado**
+> - **Severidade** é interno do time e **pode ser ajustado** conforme avaliação técnica
+
+---
+
+## O que fazer ao receber um work item do Zendesk
 
 ### Passo 1 — Ler e entender o relato
 
-### Passo 2 — Sinalizar que o ticket está em andamento
+Confira o checklist de [abertura de issue](checklist-abertura-issue.md). Se faltar informação essencial, peça via comentário `#zd`.
 
-1. Mude o estado para **Active**
+### Passo 2 — Sinalizar que está em andamento
 
-> ⚠️ **Atenção:** Nunca deixe um ticket sem atribuição.
+1. Atribua o item a você
+2. Mude o estado para **Active**
+
+> ⚠️ Nunca deixe um item sem atribuição.
 
 ### Passo 3 — Investigar
 
-### Passo 4 — Atualizar o Work Item
+### Passo 4 — Atualizar o work item
 
-A cada achado relevante, adicione um comentário técnico no work item.
+A cada achado relevante, adicione um comentário técnico no campo Discussion.
 
-**Modelo de comentário técnico:**
+**Modelo:**
 
 ```
 Investigação — [data]
 
 Sistema: <nome-do-sistema>
+Repositório: gatec-<nome-do-repo>
 Arquivo investigado: NomeTela.frm / NomeModulo.bas
 
 O que foi encontrado:
-[descreva o achado aqui]
+[descreva o achado]
 
 Próximo passo:
 [o que você vai fazer em seguida]
@@ -65,34 +84,44 @@ Próximo passo:
 
 ### Passo 5 — Comunicar ao Suporte
 
-Ao concluir a investigação (mesmo que sem solução definitiva), adicione um comentário em linguagem acessível para que o Suporte possa repassar ao cliente:
+Ao concluir (mesmo sem solução definitiva), adicione um comentário em linguagem acessível para o Suporte repassar ao cliente.
 
-> 📌 **Dica:** Utilize a tag **`#zd`** no campo Discussion para que o comentário seja enviado ao ticket no Zendesk como **observação interna**.
+> 📌 Use `#zd` como **primeira palavra** para que o comentário vá como **observação interna** no Zendesk.
 
 ### Passo 6 — Encerrar
+
+Siga o [checklist de fechamento](checklist-fechamento-issue.md) — incluindo o link do **PR no GitHub** (não mais revisão SVN) e a descrição da causa raiz.
 
 ---
 
 ## Ajustes definidos na integração Zendesk
 
-Os seguintes ajustes foram alinhados entre o time de Manutenção e o Suporte para a integração Zendesk → Azure DevOps:
+### 1. Path "Manutenção" no Zendesk
 
-### 1. User Story deve ter path "Manutenção"
+> 📌 As User Stories/Bugs criados via integração Zendesk devem conter o **path "Manutenção"** configurado no Zendesk. Isso garante que cheguem ao board correto do time.
 
-> 📌 **Regra do time:** As User Stories criadas via integração Zendesk devem conter o **path "Manutenção"** configurado no Zendesk. Isso garante que os work items cheguem corretamente ao board do time.
+### 2. SLA não deve ser retirado ao alterar status no Zendesk
 
-### 2. Não retirar SLA das Issues ao alterar status no Zendesk
+> ⚠️ Ao alterar o status de uma issue no Zendesk, o **SLA não pode ser retirado**. A contagem precisa permanecer ativa. Se isso ocorrer, comunicar à Gerência para ajuste na configuração da integração.
 
-> ⚠️ **Atenção:** Ao alterar o status de uma Issue no Zendesk, o **SLA não deve ser retirado**. A contagem de SLA deve permanecer ativa independentemente de mudanças de status no Zendesk. Se isso estiver acontecendo, comunique à Gerência para ajuste na configuração da integração.
+### 3. Retrabalho — reabrir a issue existente
 
-### 3. Retrabalho — Reabrir a Issue existente
-
-> 📌 **Regra do time:** Quando houver retrabalho em um atendimento, **não abrir uma nova Issue** no Zendesk. A Issue existente deve ser **reaberta**. Deve ser criada uma **Macro no Zendesk** para facilitar esse processo de reabertura.
+> 📌 Quando houver retrabalho, **não abrir nova issue** no Zendesk. A existente deve ser **reaberta** (via Macro). Mesma regra no Azure Boards: reabrir o work item existente.
 
 ---
 
-## Observações e Alertas
+## Diferenças em relação ao ambiente antigo
 
-> 📌 **Regra do time:** Todo ticket vindo do Zendesk deve ter, ao final, um comentário de "Resposta ao Suporte" no work item — mesmo que a resposta seja "não foi possível reproduzir o problema".
+| Antes (Azure DevOps antigo) | Agora (ERPGA Tech) |
+|---|---|
+| Issue / Fix / Hotfix vinham do Zendesk | **Bug** vem do Zendesk; Natureza identifica Hotfix |
+| Revisão SVN no comentário de fechamento | **Link do PR no GitHub** + número da revisão Git |
+| Tipos próprios do time | Tipos padronizados Senior + campos customizados |
 
-> 💡 **Automação:** O agente **Issue Validator** verifica automaticamente se as issues abertas no path Manutenção estão com os 6 campos obrigatórios preenchidos. Issues incompletas recebem um comentário `#zd` (visível ao Suporte no Zendesk) informando o que está faltando. Veja [Como Usar o Issue Validator](../agents/issue-validator-how-to.md).
+---
+
+## Observações e alertas
+
+> 📌 Todo ticket vindo do Zendesk deve ter, ao final, um comentário de "Resposta ao Suporte" no work item (com `#zd`) — mesmo que a resposta seja "não foi possível reproduzir o problema".
+
+> 💡 **Automação:** O agente **Issue Validator** verifica automaticamente as issues abertas no path Manutenção contra os campos obrigatórios. Issues incompletas recebem comentário `#zd` (visível ao Suporte no Zendesk) listando o que falta. Veja [Como Usar o Issue Validator](../agents/issue-validator-how-to.md).

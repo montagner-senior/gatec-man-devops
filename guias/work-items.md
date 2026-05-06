@@ -1,112 +1,147 @@
 ---
-title: Work Items
+title: Work Items do time
 parent: Guias
 nav_order: 4
 ---
 
-# Work Items — User Story, Fix e Hotfix
+# Work Items — User Story, Bug e Hotfix
 
 ## Objetivo
 
-Este guia explica os três tipos de work item utilizados pelo time de Manutenção de Sistemas Legados: como identificar cada um, como gerenciá-los no Azure DevOps e quais são as regras de uso.
+Explicar os tipos de work item utilizados pelo time de Manutenção no novo ambiente **ERPGA Tech**, como identificar cada um e quais são as regras do time.
 
-## Os três tipos de Work Item do time
-
-> 📌 **Regra do time:** O time usa três tipos.
-
-| Tipo | Urgência | Origem | Natureza |
-| --- | --- | --- | --- |
-| **User Story** | Normal | Solicitação de melhoria, dúvida ou incidente | Atendimentos de Dúvida e Incidentes |
-| **Fix** | Normal | Correção identificada internamente | Alteração de código — correção de erros |
-| **Hotfix** | **Alta — imediata** | Correção em processo crítico (Ex.: Fechamento ou Pesagem) | Alteração de código — correção de erros |
-
-> ⚠️ **Atenção:** Tickets do Zendesk chegam no Azure DevOps via Work Item — Criação realizada pelo time de suporte via Integração.
+> 📚 Para o catálogo completo de tipos do Azure Boards (Épico, Feature, Discovery, Apoio, Spike, Deploy, Horas Administrativas), consulte o [Guia do Azure Boards](azure-devops-iniciantes.md).
 
 ---
 
-## Task — Quando usar
+## O que mudou com a migração
 
-> 📌 **Regra do time:** Tasks **só devem ser criadas** quando houver um **segundo atendimento derivado** de uma Issue já existente — por exemplo, subir base de dados, executar script em produção, ou outra ação complementar ao atendimento principal não executado pelo Responsável Original. Ou, quando for relacionado à alguma tarefa administrativa, como reuniões.
+No ambiente antigo o time usava três tipos próprios — **Issue**, **Fix** e **Hotfix**. Na migração para o ERPGA Tech todos foram convertidos para **Bug**, e a distinção (incluindo Hotfix) é feita pelo campo **Natureza** dentro do Bug.
 
-**Não crie Tasks para:**
-- O atendimento principal do ticket (use User Story, Fix ou Hotfix)
+| Tipo antigo | Tipo novo | Como diferenciar |
+|---|---|---|
+| Issue (dúvida/incidente) | **User Story** | Atendimento de dúvida ou incidente — sem alteração de código |
+| Fix | **Bug** (Natureza padrão) | Correção de erro identificado |
+| Hotfix | **Bug** com **Natureza = Hotfix** | Correção urgente em processo crítico |
+
+---
+
+## Os tipos usados pelo time
+
+| Tipo | Urgência | Origem | Natureza |
+|---|---|---|---|
+| **User Story** | Normal | Solicitação de melhoria, dúvida ou incidente (Zendesk ou gerência) | Atendimento de Dúvida e Incidentes |
+| **Bug** | Normal | Erro identificado (Zendesk ou interno) | Alteração de código — correção de erros |
+| **Bug — Natureza Hotfix** | **Imediata** | Processo crítico parado em produção (ex.: Fechamento, Pesagem) | Alteração de código — correção urgente |
+
+> ⚠️ **Tickets do Zendesk chegam automaticamente** como Bug ou User Story via integração — o dev **nunca cria** o work item inicial de um ticket de cliente.
+
+### Natureza do Bug
+
+| Origem do Bug | Natureza |
+|---|---|
+| Vindo do Zendesk | **Definida automaticamente** pela integração — não editável |
+| Criado manualmente | Selecionável: `Hotfix`, `Bug Fix`, etc. |
+
+> 💡 Se o item é **urgente em produção**, classifique manualmente como **Bug com Natureza Hotfix**. Itens vindos do Zendesk com natureza Hotfix já chegam classificados.
+
+---
+
+## Apoio, Spike e Horas Administrativas
+
+Use os tipos abaixo quando aplicável (detalhes no [Guia Azure Boards](azure-devops-iniciantes.md)):
+
+| Tipo | Quando usar |
+|---|---|
+| **Apoio** | Atendimentos derivados de uma issue já aberta (ex: subir base, executar script), suporte interno, configurações de ambiente |
+| **Spike** | Pesquisa técnica com consumo de horas (refinamento, validação de esforço) |
+| **Horas Administrativas** | Treinamentos, reuniões da empresa, comunicados internos |
+
+> 📌 **Regra do time:** O antigo "Task" foi substituído por **Apoio** para atendimentos derivados de uma issue já existente.
 
 ---
 
 ## Timesheet (Apontador)
 
-> 📌 **Regra do time:** O apontamento de horas (Timesheet) deve ser feito **diretamente no User Story, Fix ou Hotfix**. Apontamento em tasks, somente quando tarefas administrativas. (Em Validação)
+> 📌 **Regra do time:** O apontamento de horas é feito **diretamente no User Story ou Bug** que está sendo trabalhado. Apontamentos administrativos vão para **Horas Administrativas** (sugestão: uma por mês).
 
 ---
 
 ## Retrabalho
 
-> 📌 **Regra do time:** Quando houver retrabalho em um atendimento, **não abra uma nova Issue**. **Reabra a Issue existente** e continue o trabalho nela. Isso mantém o histórico completo e facilita rastreamento.
+> 📌 **Regra do time:** Quando houver retrabalho em um atendimento, **não abra um novo work item**. **Reabra o existente** e continue nele. Mantém o histórico completo e facilita o rastreamento. Mesma regra vale no Zendesk: reabrir o ticket existente (via Macro) em vez de abrir novo.
 
 ---
 
 ## Fluxo de estados
 
 | Estado | Descrição |
-| --- | --- |
-| New | Na fila para atendimento |
-| Active | Em atendimento |
-| Waiting | Esperando por algo ou alguém |
-| Closed | Atendimento finalizado |
+|---|---|
+| **New** | Na fila para atendimento |
+| **Active** | Em atendimento |
+| **Waiting** | Esperando por algo ou alguém |
+| **Closed** | Atendimento finalizado |
+
+> ⚠️ Itens migrados que estavam em estados intermediários (Review, Teste, etc.) chegaram como **Active**. Reposicione manualmente conforme o estado real.
+
+---
 
 ## Discussion
 
 Todo work item deve ter pelo menos um comentário técnico antes de ser concluído. Não feche um work item sem registrar o que foi feito.
 
-> 📌 **Dica:** Ao incluir um comentário no campo Discussion, utilize a tag **`#zd`** como primeira palavra para que o comentário seja enviado ao ticket no Zendesk como **observação interna**.
+> 📌 **Tag `#zd`:** Ao incluir um comentário no campo Discussion, utilize **`#zd`** como primeira palavra para que o comentário seja enviado ao ticket no Zendesk como **observação interna**.
 
-> 💡 **Validação automatizada:** O agente **Issue Validator** verifica se as issues abertas possuem os 6 campos obrigatórios do [checklist de abertura](checklist-abertura-issue.md). Issues incompletas recebem comentário e tag automaticamente. Veja [como funciona](../agents/issue-validator-how-to.md).
+> 💡 **Validação automatizada:** O agente **Issue Validator** verifica se as issues abertas possuem os 7 campos do [checklist de abertura](checklist-abertura-issue.md). Issues incompletas recebem comentário e tag automaticamente. Veja [como funciona](../agents/issue-validator-how-to.md).
 
-## User Story
+---
 
-Um **User Story** representa uma dúvida ou incidente nos sistemas.
+## Exemplos de classificação
 
-**Exemplos:**
+### User Story
+- "O que o botão *Realizar Fechamento* faz?"
+- "Envio de e-mail automático retorna mensagem dizendo que o servidor SMTP está indisponível"
 
-- "O que o botão realizar fechamento faz?"
-- "Envio de e-mail automático retorna mensagem falando que o servidor SMTP está indisponível"
+### Bug
+- Tela de erro genérico
+- `Invalid use of Null`
+- `ORA-XXXX`
 
-## Fix
+### Bug — Natureza Hotfix
+- Balança retorna peso 0 e impede a operação do cliente
+- Tela de Fechamento apresentando erro em produção
 
-Um **Fix** é a correção de um erro nos sistemas.
+---
 
-**Exemplos:**
+## Documentação obrigatória (DOC)
 
-- Tela de Erro genérico explicito
-- Invalid use of Null
-- ORA-XXXX
+> 📌 No novo processo Senior, **User Stories e Bugs precisam de um item DOC vinculado** (filho da User Story / relacionado ao Bug) para avançarem no Board. Coordene com a equipe de DOC sobre o padrão de preenchimento das **Notas de Versão**.
 
-## Hotfix
+---
 
-Um **Hotfix** é uma correção **urgente** de um erro que está **parando o processo do cliente** e causando impacto direto no negócio. Tem **prioridade máxima** sobre qualquer outra atividade do time.
+## Comunicação Suporte ↔ Manutenção
 
-**Exemplos:**
+| Caminho | Como |
+|---|---|
+| Manutenção → Suporte | Comentário no work item com `#zd` (vai como observação interna no Zendesk). Para conclusão, comunicar também via Teams ao responsável do ticket. |
+| Suporte → Manutenção | Via Zendesk → integração cria/atualiza o work item automaticamente |
 
-- Balança retorna peso 0
-- Fechamento apresentando erro
+> ❌ Dev **não responde** diretamente no Zendesk — sempre via comentário no work item.
 
-## Comunicação entre Suporte x Manutenção
-
-Use o canal de comunicação Teams para informar o responsável do Ticket sobre um atendimento concluído. (Esse processo é manual até termos uma automatização ou integração do processo)
+---
 
 ## Tabela comparativa rápida
 
-| Critério | User Story | Fix | Hotfix |
+| Critério | User Story | Bug | Bug (Natureza Hotfix) |
 |---|---|---|---|
 | **Urgência** | Normal | Normal | **Imediata** |
-| **Natureza** | Atendimentos de Dúvida e Incidentes | Alteração de código — correção de erros | Alteração de código — correção de erros |
-| **Timesheet** | Apontar aqui | — | — |
+| **Natureza** | Dúvida / Incidente | Correção de erro | Correção urgente em produção |
+| **Altera código?** | Em geral, não | Sim | Sim |
+| **Timesheet** | Aponta aqui | Aponta aqui | Aponta aqui |
 
 ---
 
 ## Pendências em definição
-
-Os seguintes pontos foram levantados em alinhamento e aguardam definição pela Gerência:
 
 | Ponto | Status |
 |---|---|

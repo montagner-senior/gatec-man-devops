@@ -1,0 +1,63 @@
+Boa Tarde pessoal, tudo bem?
+ 
+Gostaria de informar que a migração da GATec para o GitHub Enterprise foi concluída com sucesso.
+ 
+Amanhã já podem trabalhar no novo ambiente sem problemas!
+ 
+Lembrando que apenas devs tem acesso ao GitHub, enquanto no Azure Boards todos tem acesso!
+ 
+Caso você seja dev e não esteja com acesso ao GitHub da um toque pra gente aqui no chat que iremos averiguar!
+ 
+Segue as URLs para acesso:
+GitHub Enterprise: https://github.com/enterprises/SeniorSistemas
+ 
+Pontos importantes:
+ 
+1. URL dos repositórios (Pra quem já é usuário GIT):
+ 
+A URL dos repositórios mudou. Ou seja, é necessário atualizar o remote nos repositórios locais.
+Todos os repositórios migrados da GATec receberam um prefixo gatec-, se o repositório no Azure Repos se chamava backend-api-datalake, no GitHub ele vai ser gatec-backend-api-datalake.
+ 
+Além do prefixo foi aplicado uma normalização dos nomes por convenção (ex: deixado tudo em letra minúscula, etc), então encontre seu repositório no GitHub, vá no botão Code selecione a opção SSH e copie a nova URL, exemplo: git@github.com:senior-sistemas/gbl-uauservice.git
+ 
+ 
+Comandos:
+Para alterar o remote: git remote set-url origin <nova_url_do_repositorio.git>
+Para verificar a alteração: git remote -v
+ 
+2. Usuários de SVN:
+ 
+Todos os repos foram migrados para Git, a partir de agora todo o fluxo de trabalho é versionado pelo Git, estamos aqui para ajudar vocês nessa transição também, parte do dia a dia já foi relatado pelo 
+Nathan Alcantara durante o treinamento de GitHub, ele deve cobrir o básico do básico, para começarem a trabalhar basta clonar o repositório utilizando a url de SSH conforme print acima.
+ 
+3. Atenção ao usuário GitHub e chave SSH:
+ 
+É necessário vincular a chave SSH ao novo usuário, abaixo o link para usar a atual ou criar uma nova caso necessário:
+https://wiki.senior.com.br/pt-br/DevSecOps/github-enterprise/configurar-ssh
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+ 
+É obrigatório que todos utilizem SSH, então certifiquem-se de configurar corretamente e sempre utilizem a url de SSH dos repositórios. Caso contrário gerará impactos na operação!
+ 
+Utilizem esses métodos para verificar se estão com os commits assinados corretamente (significa que estão utilizando SSH nas operações git):
+https://docs.github.com/en/authentication/troubleshooting-commit-signature-verification/checking-your-commit-and-tag-signature-verification-status
+ 
+4. Modelo de permissões:
+ 
+Anteriormente, no Azure Repos, as permissões eram concedidas diretamente aos usuários.
+No GitHub Enterprise, adotamos o modelo de times, onde os times terão acesso aos repositórios.
+Inicialmente foi preenchido uma planilha pelos pontos focais da unidade onde foram criados alguns times, cada um com as permissões dos seus determinados repositórios, o gerenciamento de membros desses times pode ser feito via BastionX pelos Pontos focais conforme mostrado nos treinamentos. Novos times devem ser solicitados aqui no chat nesse primeiro momento.
+ 
+5. O Ambiente Azure DevOps antigo:
+ 
+Somente o 
+Luis Lopes, Yves Polo e nós continuamos com o acesso para futuras consultas.
+ 
+O ambiente antigo ficará ativo apenas para consulta por um tempo a definir.
+Posteriormente, todos os repositórios, boards e, por fim, o próprio ambiente, serão deletados (data exata a definir).
+ 
+6. Dúvidas ou suporte inicial:
+ 
+Qualquer dúvida neste início pode ser direcionada aos pontos focais (
+Luis Lopes e Yves Polo ) pois temos um chat exclusivo com eles para lidarmos de forma mais ágil com as possíveis demandas.
+ 
+Obrigado a todos pela colaboração!

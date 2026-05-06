@@ -56,3 +56,8 @@ plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-sitemap
+
+# Pastas ignoradas no build do site
+exclude:
+  - _novo/
+  - feedback.md

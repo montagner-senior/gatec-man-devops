@@ -8,17 +8,20 @@ nav_order: 3
 
 > 📌 Este checklist é verificado automaticamente pelo agente **Issue Closure Validator**. Issues que não atenderem os itens obrigatórios recebem comentário interno e tag `conclusao-incompleta`. Veja [como funciona](../agents/closure-validator-how-to.md).
 
-## Antes de mover para "Concluído"
+> 🔄 **Pós-migração:** o controle de versão agora é **Git/GitHub Enterprise** (não mais SVN). O fechamento referencia **Pull Request** e **commit Git**.
+
+## Antes de mover para "Closed"
 
 Adicione um comentário na Discussion com as informações abaixo:
 
 | # | Item | Obrigatório | O que escrever |
 |---|------|-------------|----------------|
 | 1 | **O que foi feito** | ✅ Sempre | Descreva a ação realizada: o que corrigiu, ajustou ou investigou. Onde no código (arquivo, rotina, tela). |
-| 2 | **Revisão SVN** | ✅ Sempre | Número do commit: `r54321` ou `Rev. 54321`. Se não houve alteração de código, mencione explicitamente. |
+| 2 | **Pull Request / Commit** | ✅ Sempre | Link do PR no GitHub (ex: `https://github.com/senior-sistemas/gatec-<repo>/pull/123`) e/ou hash do commit (`a1b2c3d`). Se não houve alteração de código, mencione explicitamente. |
 | 3 | **Causa raiz** | ✅ Sempre | Por que o problema acontecia? Qual era a causa? Ex: "campo alíquota não considerava UF destino". |
 | 4 | **Achado registrado** | ⚠️ Quando relevante | Se a investigação revelou algo importante, registre em `base-conhecimento/achados/` e mencione no comentário. |
 | 5 | **Suporte notificado** | ✅ Quando tem ticket Zendesk | Adicione um comentário com `#zd` explicando a resolução para o Suporte repassar ao cliente. |
+| 6 | **DOC vinculado** | ✅ Quando aplicável | User Stories e Bugs precisam de DOC vinculado (filho/related) para avançar no Board. |
 
 ---
 
@@ -30,7 +33,8 @@ Corrigido o cálculo de ICMS na rotina de emissão de NF (frmEmissaoNF.frm).
 Causa: o campo alíquota não considerava a UF de destino na tabela ICMS_UF.
 O WHERE da SP_CALCULA_ICMS filtrava apenas por UF_ORIGEM.
 
-Revisão: r54321
+PR: https://github.com/senior-sistemas/gatec-erp-fiscal/pull/482
+Commit: a1b2c3d
 
 Achado registrado em base-conhecimento/achados/ (pode afetar outras rotinas que usam SP_CALCULA_ICMS).
 ```
@@ -43,6 +47,6 @@ Achado registrado em base-conhecimento/achados/ (pode afetar outras rotinas que 
 |---------------|----------|
 | "feito" | Não diz O QUE foi feito |
 | "Corrigido o erro" | Não diz POR QUE o erro acontecia (causa raiz) |
-| "Commitado" | Falta o número da revisão SVN |
+| "Commitado" | Falta link/identificação do PR ou commit |
 | "Conforme alinhado" | Não descreve nada |
 | (nenhum comentário) | Issue fechada sem documentação |

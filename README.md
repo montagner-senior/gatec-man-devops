@@ -7,7 +7,7 @@ permalink: /
 # Base de Conhecimento — Time de Manutenção
 {: .no_toc }
 
-Processos, guias e referências do **Time de Manutenção**.
+Processos, guias e referências do **Time de Manutenção** — projeto **ERPGA Tech** (Azure DevOps) e **GitHub Enterprise (Senior Sistemas)** após a migração.
 {: .fs-6 .fw-300 }
 
 ---
@@ -15,8 +15,10 @@ Processos, guias e referências do **Time de Manutenção**.
 | Ponto de atenção | Detalhe |
 |---|---|
 | **Origem dos Work Items** | Criados **automaticamente** via integração **Zendesk → Azure DevOps** — o dev nunca cria o work item inicial de um cliente |
-| **Retrabalho** | Sempre **reabrir a Issue existente** — nunca abrir nova |
-| **Timesheet** | Apontar diretamente no **User Story** |
+| **Tipos do time** | **User Story** (dúvida/incidente) e **Bug** (correção); Hotfix é **Bug com Natureza = Hotfix** |
+| **Código-fonte** | **GitHub Enterprise** (organização Senior Sistemas, prefixo `gatec-`) — SVN não é mais usado |
+| **Retrabalho** | Sempre **reabrir o work item existente** — nunca abrir novo |
+| **Timesheet** | Apontar diretamente no **User Story** ou **Bug** trabalhado |
 | **SLA** | Não retirar o SLA das Issues ao alterar status no Zendesk |
 
 ---
@@ -31,14 +33,16 @@ Processos, guias e referências do **Time de Manutenção**.
 
 ## Primeiros Passos
 
-- [Azure DevOps para Iniciantes](guias/azure-devops-iniciantes.md)
+- [Azure Boards (ADO) — Guia](guias/azure-devops-iniciantes.md)
+- [GitHub Enterprise — Guia](guias/github-enterprise.md)
 - [Checklist de Abertura de Issue](guias/checklist-abertura-issue.md)
+- [Checklist de Fechamento de Issue](guias/checklist-fechamento-issue.md)
 
 ---
 
 ## Work Items
 
-- [Tipos de Work Item do time — User Story, Fix, Hotfix, Task](guias/work-items.md)
+- [Tipos de Work Item do time — User Story, Bug, Hotfix](guias/work-items.md)
 - [Fluxo de estados](guias/work-items.md#fluxo-de-estados)
 - [Regras de Timesheet e Retrabalho](guias/work-items.md#timesheet-apontador)
 
@@ -62,7 +66,9 @@ Processos, guias e referências do **Time de Manutenção**.
 ## Agentes Copilot
 
 - [Issue Validator — valida issues incompletas no path Manutenção](agents/issue-validator-how-to.md)
-- [Critérios de validação (6 itens)](agents/issue-validator-validation-criteria.md)
+- [Critérios de validação (abertura)](agents/issue-validator-validation-criteria.md)
+- [Issue Closure Validator — valida fechamento](agents/closure-validator-how-to.md)
+- [Security Validator — valida PRs no GitHub](agents/security-validator-validation-criteria.md)
 - [Histórico de execuções](agents/issue-validator-history.md)
 
 ---

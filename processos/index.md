@@ -6,4 +6,4 @@ has_children: true
 
 # Processos Operacionais
 
-Fluxos passo a passo para atendimento de Fix, Hotfix, User Story e investigação de código VB6 legado.
+Fluxos passo a passo para atendimento de **User Story**, **Bug** e **Bug com Natureza Hotfix** (urgente em produção), além de investigação em código VB6 legado — todos no projeto **ERPGA Tech** com versionamento no **GitHub Enterprise**.
