@@ -310,6 +310,7 @@ Use ASCII puro (sem acentos). Use `\n` para quebras de linha no JSON.
 - **NAO** peca confirmacao - execute direto
 - **SOMENTE** valide work items do tipo **Bug** e **User Story** - ignore qualquer outro tipo
 - **NAO** use `#zd` no inicio dos comentarios - este agente posta comentarios INTERNOS
+- **NAO** inclua `#zd`, `#zendesk` ou qualquer variacao com "#" seguido de "zd" ou "zendesk" em NENHUMA parte do texto do comentario — isso dispara integracao com o Zendesk e NAO deve acontecer
 - `closure-validator-agent` DEVE aparecer no HTML (controle de idempotencia)
 - HTML em ASCII puro (sem acentos - escreva "conclusao" nao "conclusão")
 - Use **exclusivamente as tools MCP** (servidor `ado`) para interagir com o Azure DevOps (WIQL, get work item, add comment, update work item)

@@ -284,6 +284,7 @@ Use ASCII puro (sem acentos). Use `\n` para quebras de linha no JSON.
 - **SOMENTE** valide work items do tipo **Bug** e **User Story** - ignore qualquer outro tipo
 - `issue-validator-agent` DEVE aparecer no HTML (controle de idempotencia)
 - **NAO** use `#zd` no inicio dos comentarios - este agente posta comentarios INTERNOS
+- **NAO** inclua `#zd`, `#zendesk` ou qualquer variacao com "#" seguido de "zd" ou "zendesk" em NENHUMA parte do texto do comentario — isso dispara integracao com o Zendesk e NAO deve acontecer
 - HTML em ASCII puro (sem acentos - escreva "descricao" nao "descrição")
 - Use **exclusivamente as tools MCP** (servidor `ado`) para interagir com o Azure DevOps (WIQL, get work item, add comment, update work item)
 - Area Path: sempre filtre por `UNDER 'ERP - GATEC\Manutencao'`
