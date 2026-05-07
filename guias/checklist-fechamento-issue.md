@@ -21,7 +21,6 @@ Adicione um comentário na Discussion com as informações abaixo:
 | 3 | **Causa raiz** | ✅ Sempre | Por que o problema acontecia? Qual era a causa? Ex: "campo alíquota não considerava UF destino". |
 | 4 | **Achado registrado** | ⚠️ Quando relevante | Se a investigação revelou algo importante, registre em `base-conhecimento/achados/` e mencione no comentário. |
 | 5 | **Suporte notificado** | ✅ Quando tem ticket Zendesk | Adicione um comentário com `#zd` explicando a resolução para o Suporte repassar ao cliente. |
-| 6 | **DOC vinculado** | ✅ Quando aplicável | User Stories e Bugs precisam de DOC vinculado (filho/related) para avançar no Board. |
 
 ---
 

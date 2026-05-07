@@ -43,7 +43,6 @@ Responda sempre em **português brasileiro**. Seja direto e objetivo — o time 
 - **Retrabalho** → **reabrir o work item existente**, nunca criar novo
 - Work items do Zendesk chegam automaticamente via integração — o dev **nunca cria** o work item inicial de um ticket de cliente
 - Issues vindas do Zendesk devem ter o **path "Manutenção"** configurado no Zendesk
-- **DOC vinculado obrigatório** em User Stories e Bugs para avançarem no Board
 
 Referência completa: `guias/work-items.md` e `guias/azure-devops-iniciantes.md`
 

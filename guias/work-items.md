@@ -103,12 +103,6 @@ Todo work item deve ter pelo menos um comentário técnico antes de ser concluí
 
 ---
 
-## Documentação obrigatória (DOC)
-
-> 📌 No novo processo Senior, **User Stories e Bugs precisam de um item DOC vinculado** (filho da User Story / relacionado ao Bug) para avançarem no Board. Coordene com a equipe de DOC sobre o padrão de preenchimento das **Notas de Versão**.
-
----
-
 ## Comunicação Suporte ↔ Manutenção
 
 | Caminho | Como |

@@ -250,9 +250,9 @@ Campo nos work items (especialmente Bugs), usado pela equipe **DOC**. Coordene c
 | Apoio | **Related** a User Story / Feature |
 | Bug | **Related** a User Story |
 | Spike | **Child** ou **Related** a Feature / User Story |
-| **DOC** | **Child** obrigatório de User Story |
+| **DOC** | **Child** de User Story (quando aplicável) |
 
-> 📌 **Sem o DOC vinculado, a User Story não avança no Board.** Mesma regra para Bugs (precisam de documentação associada).
+> 📌 Coordene com a equipe de DOC quando necessário. O DOC **não é bloqueante** para o fluxo do Board.
 
 ---
 
