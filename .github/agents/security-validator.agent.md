@@ -1,7 +1,7 @@
 ---
 name: "Security Validator"
 description: "Valida PRs em busca de dados sensiveis expostos no diff."
-model: Claude Sonnet 4.5 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 tools: [execute, read, search]
 argument-hint: "Ex: valida o PR | analisa os arquivos alterados | valida seguranca -DryRun"
 ---

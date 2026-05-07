@@ -4,7 +4,7 @@ parent: Guias
 nav_order: 4
 ---
 
-# Work Items — User Story, Bug e Hotfix
+# Work Items — User Story e Bug
 
 ## Objetivo
 
@@ -16,13 +16,13 @@ Explicar os tipos de work item utilizados pelo time de Manutenção no novo ambi
 
 ## O que mudou com a migração
 
-No ambiente antigo o time usava três tipos próprios — **Issue**, **Fix** e **Hotfix**. Na migração para o ERPGA Tech todos foram convertidos para **Bug**, e a distinção (incluindo Hotfix) é feita pelo campo **Natureza** dentro do Bug.
+No ambiente antigo o time usava três tipos próprios — **Issue**, **Fix** e **Hotfix**. Na migração para o ERPGA Tech todos foram convertidos:
 
 | Tipo antigo | Tipo novo | Como diferenciar |
 |---|---|---|
 | Issue (dúvida/incidente) | **User Story** | Atendimento de dúvida ou incidente — sem alteração de código |
-| Fix | **Bug** (Natureza padrão) | Correção de erro identificado |
-| Hotfix | **Bug** com **Natureza = Hotfix** | Correção urgente em processo crítico |
+| Fix | **Bug** | Correção de erro identificado |
+| Hotfix | **Bug** | Correção de erro identificado (urgência tratada via Priority/Severidade) |
 
 ---
 
@@ -31,19 +31,11 @@ No ambiente antigo o time usava três tipos próprios — **Issue**, **Fix** e *
 | Tipo | Urgência | Origem | Natureza |
 |---|---|---|---|
 | **User Story** | Normal | Solicitação de melhoria, dúvida ou incidente (Zendesk ou gerência) | Atendimento de Dúvida e Incidentes |
-| **Bug** | Normal | Erro identificado (Zendesk ou interno) | Alteração de código — correção de erros |
-| **Bug — Natureza Hotfix** | **Imediata** | Processo crítico parado em produção (ex.: Fechamento, Pesagem) | Alteração de código — correção urgente |
+| **Bug** | Normal ou Imediata | Erro identificado (Zendesk ou interno) | Alteração de código — correção de erros |
 
 > ⚠️ **Tickets do Zendesk chegam automaticamente** como Bug ou User Story via integração — o dev **nunca cria** o work item inicial de um ticket de cliente.
 
-### Natureza do Bug
-
-| Origem do Bug | Natureza |
-|---|---|
-| Vindo do Zendesk | **Definida automaticamente** pela integração — não editável |
-| Criado manualmente | Selecionável: `Hotfix`, `Bug Fix`, etc. |
-
-> 💡 Se o item é **urgente em produção**, classifique manualmente como **Bug com Natureza Hotfix**. Itens vindos do Zendesk com natureza Hotfix já chegam classificados.
+> 💡 A urgência de um Bug é controlada pelos campos **Priority** (vindo do Zendesk, não editável) e **Severidade** (interno do time, ajustável). Bugs com processo crítico parado em produção devem ter Severidade elevada.
 
 ---
 
@@ -106,8 +98,6 @@ Todo work item deve ter pelo menos um comentário técnico antes de ser concluí
 - Tela de erro genérico
 - `Invalid use of Null`
 - `ORA-XXXX`
-
-### Bug — Natureza Hotfix
 - Balança retorna peso 0 e impede a operação do cliente
 - Tela de Fechamento apresentando erro em produção
 
@@ -132,12 +122,12 @@ Todo work item deve ter pelo menos um comentário técnico antes de ser concluí
 
 ## Tabela comparativa rápida
 
-| Critério | User Story | Bug | Bug (Natureza Hotfix) |
-|---|---|---|---|
-| **Urgência** | Normal | Normal | **Imediata** |
-| **Natureza** | Dúvida / Incidente | Correção de erro | Correção urgente em produção |
-| **Altera código?** | Em geral, não | Sim | Sim |
-| **Timesheet** | Aponta aqui | Aponta aqui | Aponta aqui |
+| Critério | User Story | Bug |
+|---|---|---|
+| **Urgência** | Normal | Normal ou Imediata (conforme Severidade) |
+| **Natureza** | Dúvida / Incidente | Correção de erro |
+| **Altera código?** | Em geral, não | Sim |
+| **Timesheet** | Aponta aqui | Aponta aqui |
 
 ---
 

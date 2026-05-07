@@ -1,7 +1,7 @@
 ---
 name: Assistente de Verificação de issues no JIRA
 description: Agente para verificar as issues criadas no JIRA e dar uma resposta agilizada.
-model: Claude Sonnet 4.5 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 tools: ['web/fetch', 'mcp-toolkit/tool_add_jira_issue_comment', 'mcp-toolkit/tool_get_jira_issue', 'mcp-toolkit/tool_get_jira_issue_comments', 'mcp-toolkit/tool_get_jira_issue_links', 'mcp-toolkit/tool_search_jira_issues', 'mcp-toolkit/tool_update_jira_issue', 'agent', 'todo', 'run_in_terminal', 'read_file', 'create_directory', 'file_search', 'list_dir', 'semantic_search', 'grep_search']
 
 #handoffs:

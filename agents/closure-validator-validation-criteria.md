@@ -41,7 +41,7 @@ O agente analisa **duas fontes**:
 O agente **deve ler cada comentário** procurando informações de conclusão:
 
 - **Comentário de fechamento:** Descrição da ação realizada (corrigido, ajustado, investigado)
-- **Revisão SVN:** Referências a commits ou revisões (r12345, rev 12345)
+- **Revisão/Commit:** Referências a revisões SVN (r12345) ou commits Git (hash, PR, branch)
 - **Causa raiz:** Explicação do porquê do problema
 - **Achado registrado:** Menção a registro na base de conhecimento
 - **Notificação ao Suporte:** Comentários com `#zd` ou menção explícita
@@ -56,8 +56,8 @@ O agente deve mencionar no quadro quando encontrou a informação e em qual come
 | # | Item | Obrigatório | Como o agente valida |
 |---|------|-------------|----------------------|
 | 1 | **Comentário de fechamento** | Sempre | O dev adicionou comentário na Discussion explicando o que foi feito? Precisa descrever a ação realizada. |
-| 2 | **Revisão SVN** | Sempre | Nos comentários, há referência a revisão SVN / commit? |
-| 3 | **Causa raiz** | Sempre | Nos comentários, há explicação do que causou o problema ou da razão da alteração? |
+| 2 | **Revisão/Commit** | Sempre | Nos comentários, há referência a revisão SVN ou commit Git? |
+| 3 | **Análise Crítica** | Sempre (Bugs) / N/A (User Stories) | Os campos da aba Análise Crítica estão preenchidos? (Agente Ofensor, Tipo, Causa Principal, Idade do Erro, Origem do Bug) |
 | 4 | **Achado registrado** | Quando relevante | Nos comentários, há menção a achado registrado na base de conhecimento? |
 | 5 | **Suporte notificado** | Quando tem ticket Zendesk | Nos comentários, há menção de comunicação ao Suporte via `#zd` ou similar? |
 
@@ -92,18 +92,18 @@ que explique a ação realizada. Um bom comentário de fechamento responde:
 
 ---
 
-### 2. Revisão SVN
+### 2. Revisão/Commit
 
-**O que é:** Referência ao commit/revisão SVN que contém as alterações de código.
+**O que é:** Referência ao commit/revisão (SVN ou Git) que contém as alterações de código.
 
-**Como o agente valida:** Leia todos os comentários procurando referências a revisões.
-O formato pode variar. Procure por:
-- Padrões numéricos: `r12345`, `R12345`
-- Prefixos: `rev`, `rev.`, `revisão`, `revisao`, `revision`
-- Menções diretas: `commit`, `svn`, `checkin`
-- Números de revisão próximos a palavras-chave (ex: "commitado na 54321")
+**Como o agente valida:** Leia todos os comentários procurando referências a revisões SVN
+ou commits Git. O formato pode variar. Procure por:
+- Padrões SVN: `r12345`, `R12345`, `rev`, `rev.`, `revisão`, `revisao`, `revision`, `checkin`
+- Padrões Git: hash de 7+ caracteres hexadecimais, `commit abc1234`, menção a PR, branch, `merge`
+- Menções diretas: `commit`, `svn`, `checkin`, `push`
+- Números/hashes próximos a palavras-chave (ex: "commitado na 54321", "merge do PR #42")
 
-**Válido:**
+**Válido (SVN):**
 - "Commitado na r54321"
 - "Rev. 54321 — corrigido cálculo ICMS"
 - "Revisão 54321"
@@ -111,40 +111,60 @@ O formato pode variar. Procure por:
 - "Alteração commitada - revisão 54321"
 - "Checkin realizado (54321)"
 
+**Válido (Git):**
+- "Commit abc1234f no branch fix/icms"
+- "Merge do PR #42"
+- "Push realizado - hash 3f2a1b9"
+- "Alteração no commit 7a8b9c0d1e2f3"
+
 **Inválido:**
-- Nenhuma referência a revisão nos comentários
-- "Código commitado" — sem o número da revisão
+- Nenhuma referência a revisão/commit nos comentários
+- "Código commitado" — sem o número da revisão ou hash
 - "Aguardando commit" — ainda não foi feito
 - Números soltos sem contexto de revisão (ex: "54321" isolado)
 
 > **Exceção:** Se o comentário de fechamento menciona explicitamente que **não houve
 > alteração de código** (ex: "problema era de cadastro, sem alteração de código"),
-> o agente classifica como **N/A** em vez de AUSENTE. Não é necessário revisão SVN
+> o agente classifica como **N/A** em vez de AUSENTE. Não é necessário revisão/commit
 > quando não houve código alterado.
 
 ---
 
-### 3. Causa raiz
+### 3. Análise Crítica
 
-**O que é:** Explicação do que causou o problema ou da razão pela qual a alteração
-foi necessária. Responde à pergunta "POR QUÊ?".
+**O que é:** Campos estruturados da aba "Análise Crítica" do work item (disponível apenas para Bugs).
+Documenta a classificação e causa raiz do erro de forma padronizada.
 
-**Como o agente valida:** Leia os comentários procurando explicação causal.
-Pode estar implícita no comentário de fechamento ou em comentários separados
-de investigação.
+**Campos obrigatórios (todos devem estar preenchidos):**
+
+| Campo (display name) | Campo API | O que esperar |
+|---|---|---|
+| Offensive Agent | `Custom.SR_OFFENSIVE_AGENT` | Qual time/agente causou o problema (ex: "Manutenção") |
+| Critical Analysis Type | `Custom.SR_CRITICAL_ANALYSIS_TYPE` | Tipo de problema (ex: "Lentidão", "Erro de cálculo") |
+| Principal Error Cause | `Custom.SR_ERROR_CAUSE` | Categoria da causa (ex: "SQL (Lentidão)", "Lógica") |
+| Error Age | `Custom.SR_ERROR_AGE` | Há quanto tempo o erro existe (ex: "Até 1 mês", "Mais de 6 meses") |
+| Bug Origin | `Custom.BugOrigin` | Texto livre HTML explicando a origem/causa raiz do bug |
+
+**Campo opcional:**
+| Campo | Campo API | Descrição |
+|---|---|---|
+| Error Comment | `Custom.ErrorComment` | Comentário adicional sobre o erro (pode estar vazio) |
 
 **Válido:**
-- "Causa: o campo alíquota não considerava a UF de destino na tabela ICMS_UF."
-- "O problema ocorria porque a SP_CALCULA_FRETE fazia lock exclusivo na tabela."
-- "Registro do fornecedor estava com CNPJ duplicado na base — cadastro incorreto."
-- "A rotina de fechamento mensal não incluía contratos do tipo 3 no filtro WHERE."
-- "Erro ao emitir NF porque o campo TipoNF estava NULL para registros migrados."
-- "Necessidade de incluir novo campo para atender exigência fiscal — Nota Técnica 2024.001."
+- Todos os 4 campos dropdown preenchidos E Bug Origin com texto explicativo
+- Bug Origin: "Erro originado devido alteração em estrutura de tabela. A velocidade de execução das DDLs depende da infraestrutura do cliente."
+- Bug Origin: "Campo alíquota não considerava UF destino na tabela ICMS_UF."
 
 **Inválido:**
-- Nenhuma explicação do porquê
-- "Corrigido o erro" — diz O QUE fez, mas não POR QUÊ o erro acontecia
-- "Ajustado conforme solicitação" — sem dizer a razão
+- Qualquer dos 4 campos dropdown vazio/null
+- Bug Origin vazio ou apenas espaços
+- Bug Origin genérico sem contexto: "Erro corrigido" (não explica a causa)
+
+**Para User Stories:** Este item é **N/A** — User Stories não possuem a aba Análise Crítica.
+
+> **Nota:** Os nomes de campos acima (`Custom.SR_*` e `Custom.BugOrigin`) foram
+> confirmados na API do projeto ERP - GATEC. Se algum campo retornar vazio
+> inesperadamente, use `mcp_ado_wit_get_work_item_type` para revalidar.
 
 ---
 

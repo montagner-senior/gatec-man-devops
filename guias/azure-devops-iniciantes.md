@@ -30,7 +30,7 @@ Este guia cobre o uso do **Azure Boards** no novo ambiente: hierarquia, tipos de
 7. [Apontamento de Horas](#7-apontamento-de-horas)
 8. [Delivery Plans](#8-delivery-plans)
 9. [Notas de Versão e DOC](#9-notas-de-versão-e-doc)
-10. [Natureza do Bug e Hotfix](#10-natureza-do-bug-e-hotfix)
+10. [Natureza do Bug](#10-natureza-do-bug)
 11. [Severidade × Priority](#11-severidade--priority)
 12. [Queries e Dashboards](#12-queries-e-dashboards)
 13. [Tags Estratégicas](#13-tags-estratégicas)
@@ -141,7 +141,7 @@ Pesquisa técnica **durante o desenvolvimento**. Usos típicos:
 
 Defeitos e manutenções. **Raia (swimlane) dedicada** no Board.
 
-> No ambiente antigo o time usava os tipos **Issue, Fix e Hotfix** — todos foram migrados para **Bug**, e o tipo (incluindo Hotfix) é identificado pelo campo **Natureza** (ver [seção 10](#10-natureza-do-bug-e-hotfix) e o guia [Work Items do time](work-items.md)).
+> No ambiente antigo o time usava os tipos **Issue, Fix e Hotfix** — todos foram migrados para **Bug**. A urgência é controlada pelos campos Priority e Severidade (ver [seção 10](#10-natureza-do-bug) e o guia [Work Items do time](work-items.md)).
 
 Lei do Bem em Bug: **Não Contempla** (bugs não geram lei do bem).
 
@@ -256,14 +256,14 @@ Campo nos work items (especialmente Bugs), usado pela equipe **DOC**. Coordene c
 
 ---
 
-## 10. Natureza do Bug e Hotfix
+## 10. Natureza do Bug
 
 | Origem | Comportamento |
 |---|---|
 | Bugs vindos do Zendesk | **Natureza definida automaticamente** pela integração — não editável |
-| Bugs criados manualmente | É possível selecionar/criar nova classificação (`Hotfix`, `Bug Fix`, etc.) |
+| Bugs criados manualmente | É possível selecionar/criar nova classificação conforme necessidade do time |
 
-> Para o time ERPGA Tech, **Hotfix** deixou de ser um tipo de work item — é um **Bug com Natureza = Hotfix**. Ver [Work Items do time](work-items.md).
+> No ERPGA Tech, **Fix e Hotfix deixaram de existir como tipos separados** — tudo é **Bug**. A urgência é controlada por **Severidade** (interno) e **Priority** (Zendesk). Ver [Work Items do time](work-items.md).
 
 ---
 

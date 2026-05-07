@@ -23,12 +23,11 @@ Sem os campos abaixo, o dev inicia a investigação completamente às cegas no c
 
 ### Fontes de informação
 
-O agente analisa **três fontes** para validar cada item do checklist. Basta encontrar
+O agente analisa **duas fontes** para validar cada item do checklist. Basta encontrar
 a informação em **qualquer uma** delas:
 
 1. **`descricaoTexto`** — Descrição principal da issue (campo Description)
 2. **`comentarios`** — Comentários da Discussion (adicionados pelo Suporte após a abertura)
-3. **`imagensLocais`** — Imagens inline baixadas (analisadas visualmente)
 
 > **IMPORTANTE:** O time de Suporte frequentemente complementa a issue via comentários
 > na Discussion em vez de editar a descrição. O agente **deve ler todos os comentários**
@@ -47,21 +46,6 @@ e extrair informações relevantes:
 
 O agente deve mencionar no quadro quando a informação veio de um comentário:
 *"ok (via comentário de João Silva em 2026-04-01)"*
-
-### Análise de imagens
-
-Quando o campo `imagensLocais` contiver caminhos de arquivo, o agente **deve visualizar
-cada imagem** (usando `view_image`) e extrair informações relevantes para a validação:
-
-- **Caminho no menu:** Se a imagem mostra uma tela do sistema, identifique qual tela é
-  e use como evidência do caminho no menu.
-- **Descrição do problema:** Se a imagem mostra uma mensagem de erro ou comportamento
-  inesperado, use para complementar/validar a descrição textual.
-- **Analista:** Se a imagem contém assinatura, nome ou email de analista, use como evidência.
-- **Evidência:** Imagens baixadas confirmam que a evidência existe e é acessível.
-
-O agente deve mencionar no comentário o que encontrou nas imagens, por exemplo:
-*"Imagem 1 mostra mensagem de erro 'Campo CNPJ inválido' na tela de Cadastro de Fornecedores"*
 
 ---
 

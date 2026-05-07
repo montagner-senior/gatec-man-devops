@@ -15,11 +15,11 @@ Processos, guias e referências do **Time de Manutenção** — projeto **ERPGA 
 | Ponto de atenção | Detalhe |
 |---|---|
 | **Origem dos Work Items** | Criados **automaticamente** via integração **Zendesk → Azure DevOps** — o dev nunca cria o work item inicial de um cliente |
-| **Tipos do time** | **User Story** (dúvida/incidente) e **Bug** (correção); Hotfix é **Bug com Natureza = Hotfix** |
+| **Tipos do time** | **User Story** (dúvida/incidente) e **Bug** (correção) — Fix e Hotfix não existem mais, tudo é Bug |
 | **Código-fonte** | **GitHub Enterprise** (organização Senior Sistemas, prefixo `gatec-`) — SVN não é mais usado |
 | **Retrabalho** | Sempre **reabrir o work item existente** — nunca abrir novo |
 | **Timesheet** | Apontar diretamente no **User Story** ou **Bug** trabalhado |
-| **SLA** | Não retirar o SLA das Issues ao alterar status no Zendesk |
+| **Due Date** | Não alterar o Due Date das Issues ao alterar status no Zendesk |
 
 ---
 

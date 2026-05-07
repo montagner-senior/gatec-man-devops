@@ -100,9 +100,9 @@ Siga o [checklist de fechamento](checklist-fechamento-issue.md) — incluindo o 
 
 > 📌 As User Stories/Bugs criados via integração Zendesk devem conter o **path "Manutenção"** configurado no Zendesk. Isso garante que cheguem ao board correto do time.
 
-### 2. SLA não deve ser retirado ao alterar status no Zendesk
+### 2. Due Date não deve ser alterado ao mover status no Zendesk
 
-> ⚠️ Ao alterar o status de uma issue no Zendesk, o **SLA não pode ser retirado**. A contagem precisa permanecer ativa. Se isso ocorrer, comunicar à Gerência para ajuste na configuração da integração.
+> ⚠️ Ao alterar o status de uma issue no Zendesk, o campo **Due Date** não pode ser retirado ou alterado. A data precisa permanecer ativa. Se isso ocorrer, comunicar à Gerência para ajuste na configuração da integração.
 
 ### 3. Retrabalho — reabrir a issue existente
 
@@ -114,9 +114,10 @@ Siga o [checklist de fechamento](checklist-fechamento-issue.md) — incluindo o 
 
 | Antes (Azure DevOps antigo) | Agora (ERPGA Tech) |
 |---|---|
-| Issue / Fix / Hotfix vinham do Zendesk | **Bug** vem do Zendesk; Natureza identifica Hotfix |
+| Issue / Fix / Hotfix vinham do Zendesk | **Bug** vem do Zendesk (Fix e Hotfix não existem mais) |
 | Revisão SVN no comentário de fechamento | **Link do PR no GitHub** + número da revisão Git |
 | Tipos próprios do time | Tipos padronizados Senior + campos customizados |
+| Campo "Zendesk SLA" | Campo **Due Date** |
 
 ---
 
