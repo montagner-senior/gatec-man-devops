@@ -8,7 +8,7 @@ nav_order: 2
 
 > 📌 Este checklist é verificado automaticamente pelo agente **Issue Validator**. Issues que não atenderem aos itens recebem comentário interno e tag `abertura-incompleta`. Veja [como funciona](../agents/issue-validator-how-to.md).
 
-> 🔄 **Pós-migração:** as issues agora chegam como **Bug** ou **User Story** no projeto **ERPGA Tech**. Os campos verificados continuam os mesmos.
+> 🔄 **Pós-migração:** as issues agora chegam como **Bug** ou **User Story** no projeto **ERPGAtec**. Os campos verificados continuam os mesmos.
 
 | # | Item | Campo verificado | Critério de presença |
 |---|---|---|---|

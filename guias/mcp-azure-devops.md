@@ -84,7 +84,7 @@ O arquivo pode ficar em dois locais:
 
 ## 4. Configuração do mcp.json
 
-### Configuração recomendada para o time ERPGA Tech
+### Configuração recomendada para o time ERPGAtec
 
 ```json
 {
@@ -112,7 +112,7 @@ O arquivo pode ficar em dois locais:
     {
       "id": "ado_project",
       "type": "promptString",
-      "description": "Azure DevOps project name (e.g. 'ERPGA Tech')"
+      "description": "Azure DevOps project name (e.g. 'ERPGAtec')"
     }
   ]
 }
@@ -147,7 +147,7 @@ Se preferir não ser perguntado a cada vez:
         "-d", "core", "work", "work-items", "repositories", "pipelines"
       ],
       "env": {
-        "ado_mcp_project": "ERPGA Tech"
+        "ado_mcp_project": "ERPGAtec"
       }
     }
   }
@@ -188,7 +188,7 @@ Para não precisar informar o projeto e time em cada prompt, configure via vari�
 
 ```json
 "env": {
-  "ado_mcp_project": "ERPGA Tech",
+  "ado_mcp_project": "ERPGAtec",
   "ado_mcp_team": "Manutenção"
 }
 ```
@@ -214,15 +214,15 @@ Para não precisar informar o projeto e time em cada prompt, configure via vari�
 
 | Prompt | O que faz |
 |---|---|
-| `Liste meus work items ativos no projeto ERPGA Tech` | Busca items assigned a você |
+| `Liste meus work items ativos no projeto ERPGAtec` | Busca items assigned a você |
 | `Quais bugs estão com status Active no path Manutenção?` | Filtra bugs do time |
-| `Crie um Bug com título "Erro no relatório X" no projeto ERPGA Tech` | Cria um work item |
+| `Crie um Bug com título "Erro no relatório X" no projeto ERPGAtec` | Cria um work item |
 | `Quais items estão impedidos no sprint atual?` | Lista bloqueios |
 
 ### Preparação para standup
 
 ```
-Busque meus work items do projeto ERPGA Tech e me ajude a preparar o standup:
+Busque meus work items do projeto ERPGAtec e me ajude a preparar o standup:
 o que completei, no que estou trabalhando e o que está bloqueado.
 ```
 
@@ -237,7 +237,7 @@ o que completei, no que estou trabalhando e o que está bloqueado.
 
 | Prompt | O que faz |
 |---|---|
-| `Status dos builds recentes do projeto ERPGA Tech` | Últimos builds |
+| `Status dos builds recentes do projeto ERPGAtec` | Últimos builds |
 | `Qual o último build que falhou?` | Diagnóstico rápido |
 
 > **Dica:** para forçar dados atualizados, adicione ao prompt: "Não use dados buscados anteriormente."

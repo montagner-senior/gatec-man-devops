@@ -1,5 +1,5 @@
 # Guia de Uso — Azure Boards (ADO)
-> Baseado no treinamento realizado pela equipe ERPGA Tech  
+> Baseado no treinamento realizado pela equipe ERPGAtec  
 > Facilitadora: Gisele Cimony
 
 ---
@@ -41,8 +41,8 @@
 ## 1. Acesso ao Projeto
 
 - O link de acesso ao Azure DevOps será disponibilizado pela equipe responsável.
-- Os usuários são adicionados ao projeto **ERPGA Tech** durante a migração (previsão: quinta ou sexta-feira do período de implantação).
-- Após o acesso, você verá o projeto **ERPGA Tech** com os Boards já configurados.
+- Os usuários são adicionados ao projeto **ERPGAtec** durante a migração (previsão: quinta ou sexta-feira do período de implantação).
+- Após o acesso, você verá o projeto **ERPGAtec** com os Boards já configurados.
 
 > ⚠️ Antes da migração, o acesso ainda não estará disponível para todos os usuários.
 
@@ -418,7 +418,7 @@ Principalmente o **time de produto** ao priorizar e inserir itens no backlog.
 - Dashboards são gerados automaticamente a partir das tags
 - Visibilidade consolidada por squad, sem depender de respostas manuais
 
-> 🎯 **Exemplo:** "Filtrar tudo que é da ERPGA Tech e está marcado como estratégico" — a query puxa automaticamente, sem necessidade de planilha.
+> 🎯 **Exemplo:** "Filtrar tudo que é da ERPGAtec e está marcado como estratégico" — a query puxa automaticamente, sem necessidade de planilha.
 
 ---
 
@@ -500,10 +500,10 @@ Principalmente o **time de produto** ao priorizar e inserir itens no backlog.
 
 ---
 
-> 📚 **Documentação complementar:** Os detalhes de cada campo, regras de uso e processos adicionais estão na documentação oficial do projeto ERPGA Tech no Azure DevOps.  
+> 📚 **Documentação complementar:** Os detalhes de cada campo, regras de uso e processos adicionais estão na documentação oficial do projeto ERPGAtec no Azure DevOps.  
 > Em caso de dúvidas, entre em contato com a equipe responsável pelo processo.
 
 ---
 
-*Guia gerado com base no treinamento de Azure Boards — ERPGA Tech*  
+*Guia gerado com base no treinamento de Azure Boards — ERPGAtec*  
 *Facilitadora: Gisele Cimony*

@@ -8,7 +8,7 @@ nav_order: 5
 
 ## Objetivo
 
-Explicar como funciona a integração automática entre o **Zendesk** (suporte ao cliente) e o **Azure DevOps ERPGA Tech** — por onde os tickets chegam ao time de Manutenção e o que o dev deve fazer ao recebê-los.
+Explicar como funciona a integração automática entre o **Zendesk** (suporte ao cliente) e o **Azure DevOps ERPGAtec** — por onde os tickets chegam ao time de Manutenção e o que o dev deve fazer ao recebê-los.
 
 ---
 
@@ -19,7 +19,7 @@ Cliente reporta problema ao Suporte
        ↓
 Suporte abre/atualiza o chamado no Zendesk (path: Manutenção)
        ↓
-Integração cria um Bug ou User Story no Azure DevOps (ERPGA Tech)
+Integração cria um Bug ou User Story no Azure DevOps (ERPGAtec)
        ↓
 Work Item aparece na fila do time (Boards → Backlogs)
        ↓
@@ -112,7 +112,7 @@ Siga o [checklist de fechamento](checklist-fechamento-issue.md) — incluindo o 
 
 ## Diferenças em relação ao ambiente antigo
 
-| Antes (Azure DevOps antigo) | Agora (ERPGA Tech) |
+| Antes (Azure DevOps antigo) | Agora (ERPGAtec) |
 |---|---|
 | Issue / Fix / Hotfix vinham do Zendesk | **Bug** vem do Zendesk (Fix e Hotfix não existem mais) |
 | Revisão SVN no comentário de fechamento | **Link do PR no GitHub** + número da revisão Git |

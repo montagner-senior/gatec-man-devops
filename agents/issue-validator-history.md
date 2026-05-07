@@ -15,6 +15,7 @@ nav_order: 3
 | 2026-04-02 09:49 | 24 | 0 | 0 | 24 | 0% |
 | 2026-04-06 16:35 | 25 | 0 | 1 | 24 | 4% |
 | 2026-04-13 15:00 | 7 | 4 | 1 | 3 | 57% |
+| 2026-05-07 13:06 | 1 | 1 | 0 | 0 | 100% |
 
 ## Detalhes
 
@@ -34,3 +35,9 @@ nav_order: 3
 - **Itens mais faltantes:** Caminho no menu (3), Versao (2), Tipo (1), Descricao (1), Sistema/modulo (1), Evidencia (1), Analista (1)
 - **IDs incompletas:** 128821, 128612, 125234
 - **IDs completas:** 128862, 128857, 128566, 128929 (ressalva: caminho no menu no PDF)
+
+### 2026-05-07 13:06
+
+- **Itens mais faltantes:** nenhum
+- **IDs incompletas:** (nenhuma)
+- **IDs completas:** 15759

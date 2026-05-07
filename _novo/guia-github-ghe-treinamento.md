@@ -1,5 +1,5 @@
 # Guia de Uso — GitHub Enterprise (GHE)
-> Baseado no treinamento realizado pela equipe ERPGA Tech  
+> Baseado no treinamento realizado pela equipe ERPGAtec  
 > Facilitadores: Nathan Alcantara e Matheus Miziara  
 > Time responsável: DevOps Centralizado — Matriz
 
@@ -33,7 +33,7 @@
 
 - O DevOps está sendo **centralizado na Matriz**, embora cada unidade ainda tenha seu próprio time de DevOps
 - O time central é responsável pelos novos ambientes e pela migração
-- Para o time ERPGA Tech, haverá **pontos focais** designados que serão o canal principal de comunicação com o DevOps Central
+- Para o time ERPGAtec, haverá **pontos focais** designados que serão o canal principal de comunicação com o DevOps Central
 - Os pontos focais têm acesso direto e facilitado ao time central para resolver questões
 
 > 💬 **Pontos focais confirmados:** Luis Lopes e Yves. Outros pontos focais serão indicados pelos coordenadores.
@@ -55,14 +55,14 @@ A Enterprise **Senior Sistemas** é dividida em **organizações**. Cada unidade
 
 ```
 Enterprise: Senior Sistemas
- └── Organização: Senior Sistemas (onde o time ERPGA Tech vai trabalhar)
+ └── Organização: Senior Sistemas (onde o time ERPGAtec vai trabalhar)
  └── Organização: Globaltech (já migrada)
  └── Organização: Conviva (já migrada)
  └── ... outras unidades
 ```
 
-- O time ERPGA Tech trabalhará dentro da **organização Senior Sistemas**
-- Todas as unidades — ERPGA Tech, Matriz, Governança e outras — trabalham dentro de uma **única organização**
+- O time ERPGAtec trabalhará dentro da **organização Senior Sistemas**
+- Todas as unidades — ERPGAtec, Matriz, Governança e outras — trabalham dentro de uma **única organização**
 - Por isso existe o conceito de **prefixo de repositório** (ex: `geatech-`, `conviva-`, `globaltech-`) para evitar duplicatas de nomes
 
 ---
@@ -250,7 +250,7 @@ Todos os repositórios levam um **prefixo da unidade** para evitar duplicatas de
 
 | Time/Unidade | Prefixo |
 |---|---|
-| ERPGA Tech | `geatech-` |
+| ERPGAtec | `geatech-` |
 | Conviva | `conviva-` |
 | Globaltech | `globaltech-` |
 
@@ -260,7 +260,7 @@ Todos os repositórios levam um **prefixo da unidade** para evitar duplicatas de
 
 ### Times no GitHub
 
-Dentro da organização existem **times** que agrupam pessoas e definem quais repositórios cada grupo pode acessar. A composição dos times foi definida previamente em planilha pelo ponto focal da ERPGA Tech.
+Dentro da organização existem **times** que agrupam pessoas e definem quais repositórios cada grupo pode acessar. A composição dos times foi definida previamente em planilha pelo ponto focal da ERPGAtec.
 
 ### Quem gerencia os times
 
@@ -405,11 +405,11 @@ O formato do commit determina o tipo de versão gerada automaticamente:
 ### Durante o rollout e migração
 
 - Use o **chat do treinamento** para tirar dúvidas diretamente com o time DevOps
-- Atendimento é **prioritário** para o time ERPGA Tech durante a migração
+- Atendimento é **prioritário** para o time ERPGAtec durante a migração
 
 ### Após a migração (dia a dia — a partir de 2 a 3 semanas)
 
-- Direcione dúvidas e questões para os **pontos focais** da ERPGA Tech
+- Direcione dúvidas e questões para os **pontos focais** da ERPGAtec
 - Os pontos focais respondem o que sabem ou acionam o DevOps Central quando necessário
 
 ### Pontos focais confirmados
@@ -437,5 +437,5 @@ O formato do commit determina o tipo de versão gerada automaticamente:
 
 ---
 
-*Guia gerado com base no treinamento de GitHub Enterprise — ERPGA Tech*  
+*Guia gerado com base no treinamento de GitHub Enterprise — ERPGAtec*  
 *Facilitadores: Nathan Alcantara e Matheus Miziara*

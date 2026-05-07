@@ -7,7 +7,7 @@ nav_order: 6
 # Guia de Uso — GitHub Enterprise (GHE)
 
 > Time DevOps responsável: **DevOps Centralizado — Matriz**
-> Pontos focais ERPGA Tech: **Luis Lopes** e **Yves Polo**
+> Pontos focais ERPGAtec: **Luis Lopes** e **Yves Polo**
 
 A partir da migração, **todo o código-fonte** do time (antes em SVN/Azure Repos) está no **GitHub Enterprise da Senior**. Apenas devs têm acesso ao GitHub — analistas e demais perfis seguem usando o Azure Boards.
 
@@ -48,7 +48,7 @@ A partir da migração, **todo o código-fonte** do time (antes em SVN/Azure Rep
 
 ```
 Enterprise: Senior Sistemas
- └── Organização: Senior Sistemas    ← onde o ERPGA Tech trabalha
+ └── Organização: Senior Sistemas    ← onde o ERPGAtec trabalha
  └── Organização: Globaltech
  └── Organização: Conviva
  └── ... outras unidades
@@ -58,7 +58,7 @@ Como todas as unidades convivem na mesma organização, todo repositório recebe
 
 | Time/Unidade | Prefixo |
 |---|---|
-| ERPGA Tech | `gatec-` |
+| ERPGAtec | `gatec-` |
 | Conviva    | `conviva-` |
 | Globaltech | `globaltech-` |
 
@@ -278,7 +278,7 @@ Ainda **não obrigatório** na migração — mas é a direção. Quando ativado
 | Quando | Para onde levar a dúvida |
 |---|---|
 | Rollout / migração | Chat do treinamento DevOps (atendimento prioritário) |
-| Dia a dia | **Pontos focais ERPGA Tech**: Luis Lopes, Yves Polo |
+| Dia a dia | **Pontos focais ERPGAtec**: Luis Lopes, Yves Polo |
 | Problema de acesso/permissão GitHub | Chat com DevOps Central |
 
 ### O que solicitar diretamente ao DevOps Central

@@ -2,7 +2,7 @@
 name: "Issue Validator"
 description: "Valida issues do Azure DevOps no path Manutenção com inteligência. Analisa descrições, identifica informações faltantes e orienta o Suporte."
 model: Claude Sonnet 4.6 (copilot)
-tools: [read, edit, search]
+tools: [read/getNotebookSummary, read/problems, read/readFile, read/viewImage, read/terminalSelection, read/terminalLastCommand, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, edit/rename, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/textSearch, search/usages, ado/core_get_identity_ids, ado/core_list_project_teams, ado/core_list_projects, ado/wit_add_artifact_link, ado/wit_add_child_work_items, ado/wit_add_work_item_comment, ado/wit_create_work_item, ado/wit_get_query, ado/wit_get_query_results_by_id, ado/wit_get_work_item, ado/wit_get_work_item_attachment, ado/wit_get_work_item_type, ado/wit_get_work_items_batch_by_ids, ado/wit_get_work_items_for_iteration, ado/wit_link_work_item_to_pull_request, ado/wit_list_backlog_work_items, ado/wit_list_backlogs, ado/wit_list_work_item_comments, ado/wit_list_work_item_revisions, ado/wit_my_work_items, ado/wit_query_by_wiql, ado/wit_update_work_item, ado/wit_update_work_item_comment, ado/wit_update_work_items_batch, ado/wit_work_item_unlink, ado/wit_work_items_link]
 argument-hint: "Ex: valida as issues | valide a issue #128340 | roda o validador -Top 5 | roda o validador -DryRun | revalida as issues"
 ---
 
@@ -87,10 +87,6 @@ Use a tool MCP de **get work item** (com expand relations) para obter os campos:
 Tambem use a tool MCP de **get work item comments** para verificar:
 - Se ja existe comentario com "issue-validator-agent" (jaValidada)
 - Extrair comentarios da Discussion para analise
-
-**Filtros pos-query** (excluir do processamento):
-- Processo em: "Mobile", "SimpleFarm", "Web", "Integração", "Informática"
-- Modulo em: "Scouting"
 
 Para cada issue processada, monte um objeto com:
 - `id`, `titulo`, `tipoWorkItem`, `createdDate`

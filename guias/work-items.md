@@ -8,7 +8,7 @@ nav_order: 4
 
 ## Objetivo
 
-Explicar os tipos de work item utilizados pelo time de Manutenção no novo ambiente **ERPGA Tech**, como identificar cada um e quais são as regras do time.
+Explicar os tipos de work item utilizados pelo time de Manutenção no novo ambiente **ERPGAtec**, como identificar cada um e quais são as regras do time.
 
 > 📚 Para o catálogo completo de tipos do Azure Boards (Épico, Feature, Discovery, Apoio, Spike, Deploy, Horas Administrativas), consulte o [Guia do Azure Boards](azure-devops-iniciantes.md).
 
@@ -16,7 +16,7 @@ Explicar os tipos de work item utilizados pelo time de Manutenção no novo ambi
 
 ## O que mudou com a migração
 
-No ambiente antigo o time usava três tipos próprios — **Issue**, **Fix** e **Hotfix**. Na migração para o ERPGA Tech todos foram convertidos:
+No ambiente antigo o time usava três tipos próprios — **Issue**, **Fix** e **Hotfix**. Na migração para o ERPGAtec todos foram convertidos:
 
 | Tipo antigo | Tipo novo | Como diferenciar |
 |---|---|---|

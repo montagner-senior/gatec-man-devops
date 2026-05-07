@@ -6,7 +6,7 @@ nav_order: 1
 
 # Azure Boards (ADO) — Guia do time
 
-> Projeto: **ERPGA Tech** (organização nova após migração do Azure DevOps).
+> Projeto: **ERPGAtec** (organização nova após migração do Azure DevOps).
 > Treinamento conduzido por **Gisele Cimony**.
 
 Este guia cobre o uso do **Azure Boards** no novo ambiente: hierarquia, tipos de work item, campos obrigatórios, integrações e o que mudou após a migração.
@@ -43,7 +43,7 @@ Este guia cobre o uso do **Azure Boards** no novo ambiente: hierarquia, tipos de
 ## 1. Acesso ao projeto
 
 - Link do Azure DevOps disponibilizado pelo time responsável
-- Projeto: **ERPGA Tech**
+- Projeto: **ERPGAtec**
 - Boards já vêm configurados após a migração
 
 > O ambiente antigo (`gantc.visualstudio.com`) ficará disponível somente para consulta por tempo a definir, com acesso restrito a Luis Lopes, Yves Polo e DevOps Central.
@@ -263,7 +263,7 @@ Campo nos work items (especialmente Bugs), usado pela equipe **DOC**. Coordene c
 | Bugs vindos do Zendesk | **Natureza definida automaticamente** pela integração — não editável |
 | Bugs criados manualmente | É possível selecionar/criar nova classificação conforme necessidade do time |
 
-> No ERPGA Tech, **Fix e Hotfix deixaram de existir como tipos separados** — tudo é **Bug**. A urgência é controlada por **Severidade** (interno) e **Priority** (Zendesk). Ver [Work Items do time](work-items.md).
+> No ERPGAtec, **Fix e Hotfix deixaram de existir como tipos separados** — tudo é **Bug**. A urgência é controlada por **Severidade** (interno) e **Priority** (Zendesk). Ver [Work Items do time](work-items.md).
 
 ---
 
@@ -391,4 +391,4 @@ O migrador preserva o histórico, mas pode mostrar entradas estranhas (ex: item 
 
 ---
 
-*Guia baseado no treinamento Azure Boards — ERPGA Tech (facilitadora: Gisele Cimony).*
+*Guia baseado no treinamento Azure Boards — ERPGAtec (facilitadora: Gisele Cimony).*

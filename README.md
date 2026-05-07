@@ -7,7 +7,7 @@ permalink: /
 # Base de Conhecimento — Time de Manutenção
 {: .no_toc }
 
-Processos, guias e referências do **Time de Manutenção** — projeto **ERPGA Tech** (Azure DevOps) e **GitHub Enterprise (Senior Sistemas)** após a migração.
+Processos, guias e referências do **Time de Manutenção** — projeto **ERPGAtec** (Azure DevOps) e **GitHub Enterprise (Senior Sistemas)** após a migração.
 {: .fs-6 .fw-300 }
 
 ---
