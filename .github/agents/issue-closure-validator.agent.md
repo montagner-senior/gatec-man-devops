@@ -377,7 +377,7 @@ Use EXATAMENTE estes parametros. Erros de schema fazem a execucao falhar.
     {
       "op": "replace",
       "path": "/fields/System.Tags",
-      "value": "zendesk; conclusao-incompleta"
+      "value": "conclusao-incompleta"
     }
   ]
 }

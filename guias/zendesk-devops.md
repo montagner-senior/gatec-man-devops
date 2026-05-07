@@ -125,4 +125,4 @@ Siga o [checklist de fechamento](checklist-fechamento-issue.md) — incluindo o 
 
 > 📌 Todo ticket vindo do Zendesk deve ter, ao final, um comentário de "Resposta ao Suporte" no work item (com `#zd`) — mesmo que a resposta seja "não foi possível reproduzir o problema".
 
-> 💡 **Automação:** O agente **Issue Validator** verifica automaticamente as issues abertas no path Manutenção contra os campos obrigatórios. Issues incompletas recebem comentário `#zd` (visível ao Suporte no Zendesk) listando o que falta. Veja [Como Usar o Issue Validator](../agents/issue-validator-how-to.md).
+> 💡 **Automação:** O agente **Issue Validator** verifica automaticamente as issues abertas no path Manutenção contra os campos obrigatórios. Issues incompletas recebem comentário interno listando o que falta. Veja [Como Usar o Issue Validator](../agents/issue-validator-how-to.md).

@@ -127,7 +127,7 @@ revalida a issue #128340
 | 1 | Carrega critérios de validação (`agents/issue-validator-validation-criteria.md`) |
 | 2 | Busca issues via MCP (WIQL filtrando por `ERP - GATEC\Manutencao` e filhos) |
 | 3 | **Lê a descrição de cada issue e valida com inteligência** |
-| 4 | Posta comentário HTML (com `#zd`) e aplica tag via MCP |
+| 4 | Posta comentário interno (sem `#zd`) e aplica tag via MCP |
 | 5 | Apresenta relatório e atualiza histórico |
 
 ---

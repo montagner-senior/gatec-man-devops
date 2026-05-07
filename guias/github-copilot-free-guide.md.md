@@ -84,7 +84,7 @@ O repositório `gatec-man-devops` inclui agentes personalizados que automatizam 
 
 | Agente | O que faz | Comando rápido |
 |--------|-----------|----------------|
-| **Issue Validator** | Valida issues abertas no path Manutenção contra o [checklist de abertura](checklist-abertura-issue.md). Posta comentário `#zd` e tag `abertura-incompleta` nas incompletas. | `valida as issues` |
+| **Issue Validator** | Valida issues abertas no path Manutenção contra o [checklist de abertura](checklist-abertura-issue.md). Posta comentário interno e tag `abertura-incompleta` nas incompletas. | `valida as issues` |
 | **Issue Closure Validator** | Valida a qualidade do fechamento das issues contra o [checklist de fechamento](checklist-fechamento-issue.md). | `valida as conclusoes` |
 | **Security Validator** | Valida PRs em busca de dados sensíveis expostos no diff. | `valida o PR` |
 

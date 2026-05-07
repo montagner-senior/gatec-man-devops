@@ -135,7 +135,8 @@ Para TODAS as issues (completas, incompletas, e ressalvas), aplique as acoes
 **diretamente via MCP tools**:
 
 1. **Postar comentario:** Use a tool MCP de **add work item comment** para postar
-   o HTML gerado (veja templates abaixo). O comentario DEVE comecar com `#zd`.
+   o HTML gerado (veja templates abaixo). O comentario NAO deve comecar com `#zd`
+   (este agente posta comentarios INTERNOS, nao sincroniza com Zendesk).
 
 2. **Atualizar tags:** Use a tool MCP de **update work item** para alterar o campo
    `System.Tags`:
@@ -241,7 +242,7 @@ Quando o usuario pede "revalida as issues" ou "revalida a issue #128340":
 Use ASCII puro. Use `\n` para quebras de linha no JSON.
 
 ```
-#zd\n<h2>&#9989; Issue Complementada</h2>\n<p>Esta issue foi <strong>reavaliada</strong> e agora atende ao checklist minimo do time de Manutencao.</p>\n<h3>Itens validados</h3>\n<table>\n<thead><tr><th>#</th><th>Item</th><th>Status</th></tr></thead>\n<tbody>\n<tr><td>1</td><td>Tipo</td><td>ok</td></tr>\n<tr><td>2</td><td>Descricao</td><td>ok</td></tr>\n<tr><td>3</td><td>Sistema/modulo</td><td>ok</td></tr>\n<tr><td>4</td><td>Caminho no menu</td><td>ok</td></tr>\n<tr><td>5</td><td>Evidencia</td><td>ok</td></tr>\n<tr><td>6</td><td>Analista</td><td>ok</td></tr>\n<tr><td>7</td><td>Versao</td><td>ok</td></tr>\n</tbody>\n</table>\n<p>Tag <code>abertura-incompleta</code> removida.</p>\n<p>&#129302; Gerado por issue-validator-agent</p>
+<h2>&#9989; Issue Complementada</h2>\n<p>Esta issue foi <strong>reavaliada</strong> e agora atende ao checklist minimo do time de Manutencao.</p>\n<h3>Itens validados</h3>\n<table>\n<thead><tr><th>#</th><th>Item</th><th>Status</th></tr></thead>\n<tbody>\n<tr><td>1</td><td>Tipo</td><td>ok</td></tr>\n<tr><td>2</td><td>Descricao</td><td>ok</td></tr>\n<tr><td>3</td><td>Sistema/modulo</td><td>ok</td></tr>\n<tr><td>4</td><td>Caminho no menu</td><td>ok</td></tr>\n<tr><td>5</td><td>Evidencia</td><td>ok</td></tr>\n<tr><td>6</td><td>Analista</td><td>ok</td></tr>\n<tr><td>7</td><td>Versao</td><td>ok</td></tr>\n</tbody>\n</table>\n<p>Tag <code>abertura-incompleta</code> removida.</p>\n<p>&#129302; Gerado por issue-validator-agent</p>
 ```
 
 ---
@@ -251,7 +252,7 @@ Use ASCII puro. Use `\n` para quebras de linha no JSON.
 Use ASCII puro. Use `\n` para quebras de linha no JSON.
 
 ```
-#zd\n<h2>&#9989; Validacao de Qualidade - Issue Completa</h2>\n<p>Esta issue foi analisada e <strong>atende ao checklist minimo</strong> do time de Manutencao.</p>\n<h3>Resultado</h3>\n<table>\n<thead><tr><th>#</th><th>Item</th><th>Valor encontrado</th><th>Status</th></tr></thead>\n<tbody>\n<tr><td>1</td><td>Tipo</td><td>{valor}</td><td>ok</td></tr>\n<tr><td>2</td><td>Descricao</td><td>{resumo curto}</td><td>ok</td></tr>\n<tr><td>3</td><td>Sistema/modulo</td><td>{valor}</td><td>ok</td></tr>\n<tr><td>4</td><td>Caminho no menu</td><td>{trecho encontrado}</td><td>{ok ou &#9888; ressalva}</td></tr>\n<tr><td>5</td><td>Evidencia</td><td>{N anexo(s) / Imagem inline}</td><td>ok</td></tr>\n<tr><td>6</td><td>Analista</td><td>{nome encontrado}</td><td>ok</td></tr>\n<tr><td>7</td><td>Versao</td><td>{versao encontrada}</td><td>ok</td></tr>\n</tbody>\n</table>\n<p>&#127991;&#65039; Tag: <code>abertura-completa</code><br/>&#129302; Gerado por issue-validator-agent</p>
+<h2>&#9989; Validacao de Qualidade - Issue Completa</h2>\n<p>Esta issue foi analisada e <strong>atende ao checklist minimo</strong> do time de Manutencao.</p>\n<h3>Resultado</h3>\n<table>\n<thead><tr><th>#</th><th>Item</th><th>Valor encontrado</th><th>Status</th></tr></thead>\n<tbody>\n<tr><td>1</td><td>Tipo</td><td>{valor}</td><td>ok</td></tr>\n<tr><td>2</td><td>Descricao</td><td>{resumo curto}</td><td>ok</td></tr>\n<tr><td>3</td><td>Sistema/modulo</td><td>{valor}</td><td>ok</td></tr>\n<tr><td>4</td><td>Caminho no menu</td><td>{trecho encontrado}</td><td>{ok ou &#9888; ressalva}</td></tr>\n<tr><td>5</td><td>Evidencia</td><td>{N anexo(s) / Imagem inline}</td><td>ok</td></tr>\n<tr><td>6</td><td>Analista</td><td>{nome encontrado}</td><td>ok</td></tr>\n<tr><td>7</td><td>Versao</td><td>{versao encontrada}</td><td>ok</td></tr>\n</tbody>\n</table>\n<p>&#127991;&#65039; Tag: <code>abertura-completa</code><br/>&#129302; Gerado por issue-validator-agent</p>
 ```
 
 ---
@@ -261,7 +262,7 @@ Use ASCII puro. Use `\n` para quebras de linha no JSON.
 Use ASCII puro (sem acentos). Use `\n` para quebras de linha no JSON.
 
 ```
-#zd\n<h2>&#9888;&#65039; Validacao de Qualidade - Issue Incompleta</h2>\n<p>Esta issue foi analisada e <strong>nao atende ao checklist minimo</strong> para o time de Manutencao.</p>\n<h3>Resultado</h3>\n<table>\n<thead><tr><th>#</th><th>Item</th><th>Valor encontrado</th><th>Status</th></tr></thead>\n<tbody>\n<tr><td>1</td><td>Tipo</td><td>{valor ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>2</td><td>Descricao</td><td>{resumo curto do que encontrou}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>3</td><td>Sistema/modulo</td><td>{valor ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>4</td><td>Caminho no menu</td><td>{trecho encontrado ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>5</td><td>Evidencia</td><td>{N anexo(s) / Imagem inline / ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>6</td><td>Analista</td><td>{nome ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>7</td><td>Versao</td><td>{versao ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n</tbody>\n</table>\n<h3>O que falta</h3>\n<ul>\n{para cada AUSENTE: <li><strong>N. Item</strong> - explicacao contextual</li>\n}\n</ul>\n<h3>Como corrigir</h3>\n<p>{orientacao personalizada}</p>\n<p>&#127991;&#65039; Tag: <code>abertura-incompleta</code><br/>&#129302; Gerado por issue-validator-agent</p>
+<h2>&#9888;&#65039; Validacao de Qualidade - Issue Incompleta</h2>\n<p>Esta issue foi analisada e <strong>nao atende ao checklist minimo</strong> para o time de Manutencao.</p>\n<h3>Resultado</h3>\n<table>\n<thead><tr><th>#</th><th>Item</th><th>Valor encontrado</th><th>Status</th></tr></thead>\n<tbody>\n<tr><td>1</td><td>Tipo</td><td>{valor ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>2</td><td>Descricao</td><td>{resumo curto do que encontrou}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>3</td><td>Sistema/modulo</td><td>{valor ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>4</td><td>Caminho no menu</td><td>{trecho encontrado ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>5</td><td>Evidencia</td><td>{N anexo(s) / Imagem inline / ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>6</td><td>Analista</td><td>{nome ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n<tr><td>7</td><td>Versao</td><td>{versao ou ausente}</td><td>{ok ou AUSENTE}</td></tr>\n</tbody>\n</table>\n<h3>O que falta</h3>\n<ul>\n{para cada AUSENTE: <li><strong>N. Item</strong> - explicacao contextual</li>\n}\n</ul>\n<h3>Como corrigir</h3>\n<p>{orientacao personalizada}</p>\n<p>&#127991;&#65039; Tag: <code>abertura-incompleta</code><br/>&#129302; Gerado por issue-validator-agent</p>
 ```
 
 **Na secao "O que falta", seja ESPECIFICO e contextual:**
@@ -282,7 +283,7 @@ Use ASCII puro (sem acentos). Use `\n` para quebras de linha no JSON.
 - **NAO** peca confirmacao - execute direto
 - **SOMENTE** valide work items do tipo **Bug** e **User Story** - ignore qualquer outro tipo
 - `issue-validator-agent` DEVE aparecer no HTML (controle de idempotencia)
-- `#zd` DEVE ser a primeira palavra do comentario (dispara sync Zendesk)
+- **NAO** use `#zd` no inicio dos comentarios - este agente posta comentarios INTERNOS
 - HTML em ASCII puro (sem acentos - escreva "descricao" nao "descrição")
 - Use **exclusivamente as tools MCP** (servidor `ado`) para interagir com o Azure DevOps (WIQL, get work item, add comment, update work item)
 - Area Path: sempre filtre por `UNDER 'ERP - GATEC\Manutencao'`
@@ -349,7 +350,7 @@ Use EXATAMENTE estes parametros. Erros de schema fazem a execucao falhar.
     {
       "op": "replace",
       "path": "/fields/System.Tags",
-      "value": "zendesk; abertura-incompleta"
+      "value": "abertura-incompleta"
     }
   ]
 }
